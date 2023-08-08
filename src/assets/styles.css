@@ -1,13 +1,54 @@
-*{
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
     display: none;
 }
 
-/* body{
+body {
+    background-color: #f3f3f3;
+    margin: 0;
+}
 
-} */
+.text-editor .ql-toolbar {
+    text-align: center;
+    z-index: 1;
+    background: #f3f3f3;
+    position: sticky;
+    top: 0;
+}
+
+.text-editor .ql-container {
+    display: flex;
+    justify-content: center;
+}
+
+.text-editor .ql-editor {
+    width: 8.5in;
+    min-height: 11in;
+    padding: 1in;
+    margin: 1rem;
+    background-color: white;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+}
+
+@page {
+    margin: 1in;
+}
+
+@media print {
+    .text-editor .ql-toolbar {
+        display: none;
+    }
+
+    .text-editor .ql-editor {
+        text-align: start;
+        width: 6.5in;
+        min-height: 9in;
+        padding: 0;
+        box-shadow: none;
+    }
+}

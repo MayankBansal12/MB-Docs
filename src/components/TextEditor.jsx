@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
+import "../assets/styles.css";
 
 var toolbarOptions = [
     [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-    ['blockquote', 'code-block'],
+    ['image','blockquote', 'code-block'],
 
     [{ 'font': [] }],
     [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
