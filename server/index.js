@@ -7,5 +7,8 @@ const io = new Server(5000, {
 });
 
 io.on("connection", (socket) => {
-    console.log("Connected to socket.io");
+  socket.on("send", (delta) => {
+    socket.broadcast.emit("receive",delta);
+  });
+  console.log("Connected to socket.io!");
 });
