@@ -7,8 +7,14 @@ const io = new Server(5000, {
 });
 
 io.on("connection", (socket) => {
-  socket.on("send", (delta) => {
-    socket.broadcast.emit("receive",delta);
+  // Creating a new doc and joining the new id
+  socket.on("create-document", (documentId) => {
+    const data = "";
+    socket.join(documentId);
+    socket.emit("load-document", data);
+
+    socket.on("send", (delta) => {
+      socket.broadcast.to(documentId).emit("receive", delta);
+    });
   });
-  console.log("Connected to socket.io!");
 });

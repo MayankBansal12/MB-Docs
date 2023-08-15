@@ -3,6 +3,7 @@ import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import "../assets/styles.css";
 import { io } from "socket.io-client";
+import { useParams } from 'react-router-dom';
 
 var toolbarOptions = [
     [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -28,6 +29,7 @@ var toolbarOptions = [
 const TextEditor = () => {
     const [socket, setSocket] = useState();
     const [quill, setQuill] = useState();
+    const { id: documentId } = useParams();
 
     // Intializing/Connecting to socket server
     useEffect(() => {
@@ -39,9 +41,21 @@ const TextEditor = () => {
         }
     }, []);
 
+    // Creating seperate room/doc using document Id
+    useEffect(() => {
+        if (socket == null || quill == null) return;
+
+        socket.once("load-document", data => {
+            quill.setContents(data);
+            quill.enable();
+        });
+
+        socket.emit("create-document", documentId);
+    }, [socket, quill, documentId])
+
     // Sending the change to server whenever user types 
     useEffect(() => {
-        if (socket == null || quill == null) return
+        if (socket == null || quill == null) return;
 
         const handleChange = (delta, oldDelta, source) => {
             if (source !== "user") return
@@ -75,7 +89,7 @@ const TextEditor = () => {
         wrapper.innerText = "";
         const editor = document.createElement("div");
         wrapper.append(editor);
-        setQuill(new Quill(editor, {
+        const newQuill = new Quill(editor, {
             modules: {
                 toolbar: toolbarOptions,
                 history: {
@@ -85,7 +99,9 @@ const TextEditor = () => {
                 },
             },
             theme: "snow"
-        }));
+        });
+        newQuill.disable();
+        setQuill(newQuill);
     }, []);
 
     return (
