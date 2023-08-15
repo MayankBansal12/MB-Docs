@@ -2,8 +2,9 @@ import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Home from "./Home";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate  } from "react-router-dom";
 import TextEditor from "./TextEditor";
+const { v4: uuidv4 } = require('uuid');
 
 const App = () => {
   return (
@@ -11,11 +12,16 @@ const App = () => {
       <Header />
       <Routes>
         <Route exact path="/" Component={Home} />
-        <Route exact path="/editor" Component={TextEditor} />
+        <Route exact path="/editor" element={<EditorRedirect />} />
+        <Route path="/documents/:id" Component={TextEditor} />
       </Routes>
       <Footer />
     </BrowserRouter>
   )
 }
+// Component to handle the /editor route and generate UUID-based dynamic route
+const EditorRedirect = () => {
+  return <Navigate to={`/documents/${uuidv4()}`} />;
+};
 
 export default App;
