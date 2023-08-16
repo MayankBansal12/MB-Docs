@@ -20,23 +20,31 @@ io.on("connection", (socket) => {
     const document = await updateData(documentId);
 
     socket.join(documentId);
+
+    // Loading the doc from the database
     socket.emit("load-document", document.data);
+
+    // Sending the changes to all the users connected in the room
     socket.on("send", (delta) => {
       socket.broadcast.to(documentId).emit("receive", delta);
     });
+
+    // Updating the data in the database
     socket.on("save", async (data) => {
       await Document.findOneAndUpdate({ docId: documentId }, { data: data });
     });
   });
 });
 
-const defaultValue = "";
+// Function to find or create the new docoument in the database
 const updateData = async (id) => {
   const document = await Document.findOne({ docId: id });
+  // If document already exists, return it
   if (document) {
     return document;
   }
 
   // If the document doesn't exist, create a new one
-  return Document.create({ docId: id, data: defaultValue });
+  const defaultValue = "";
+  return await Document.create({ docId: id, data: defaultValue });
 };
