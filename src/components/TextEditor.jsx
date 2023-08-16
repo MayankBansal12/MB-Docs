@@ -83,6 +83,19 @@ const TextEditor = () => {
         }
     }, [socket, quill]);
 
+    // Saving the changes to the database
+    useEffect(() => {
+        if (socket == null || quill == null) return
+
+        const interval = setInterval(() => {
+            socket.emit("save", quill.getContents());
+        }, 2000);
+
+        return (() => {
+            clearInterval(interval);
+        });
+    }, [socket, quill]);
+
     // Intializing the quill editor
     const wrapperRef = useCallback((wrapper) => {
         if (wrapper == null) return;
