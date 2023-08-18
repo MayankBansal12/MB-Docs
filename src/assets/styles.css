@@ -1,7 +1,7 @@
 * {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 ::-webkit-scrollbar {
@@ -11,6 +11,11 @@
 body {
     background-color: #f3f3f3;
     margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+a {
+    text-decoration: none;
 }
 
 .text-editor .ql-toolbar {
@@ -51,4 +56,72 @@ body {
         padding: 0;
         box-shadow: none;
     }
+}
+
+/* Home Page */
+.container {
+    width: 100%;
+    margin-block: 3rem;
+    padding-inline: 5rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem 1.25rem;
+}
+
+.tile {
+    position: relative;
+    width: 210px;
+    height: 285px;
+    background-color: rgba(160, 160, 160, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    border: 2px dotted transparent;
+    transition: all 0.3s ease;
+}
+
+.tile:hover {
+    border-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+.icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-weight: bolder;
+    color: rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.icon span {
+    font-size: 4rem;
+}
+
+.content {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+}
+
+.edit {
+    height: 72%;
+}
+
+.edit span {
+    font-size: 3rem;
+}
+
+.heading {
+    font-size: 1.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.date {
+    font-size: 0.75rem;
 }
