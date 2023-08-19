@@ -1,50 +1,34 @@
-const { Server } = require("socket.io");
+const express = require("express");
+const http = require("http");
+const socketIo = require("socket.io");
 const mongoose = require("mongoose");
-const Document = require("./model/doc-model");
 require("dotenv").config();
 
-mongoose.connect(process.env.ATLAS_URI);
-mongoose.connection.once("open", () => {
-  console.log("Connected to the database!");
-});
-
-const io = new Server(5000, {
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server, {
   cors: {
     origin: "*",
   },
 });
 
-io.on("connection", (socket) => {
-  // Creating a new doc and joining the new id
-  socket.on("create-document", async (documentId) => {
-    const document = await updateData(documentId);
+const PORT = process.env.PORT || 5000;
 
-    socket.join(documentId);
-
-    // Loading the doc from the database
-    socket.emit("load-document", document.data);
-
-    // Sending the changes to all the users connected in the room
-    socket.on("send", (delta) => {
-      socket.broadcast.to(documentId).emit("receive", delta);
-    });
-
-    // Updating the data in the database
-    socket.on("save", async (data) => {
-      await Document.findOneAndUpdate({ docId: documentId }, { data: data });
-    });
-  });
+// Set up a route
+app.get("/", (req, res) => {
+  res.send("Express Server is up and running.");
 });
 
-// Function to find or create the new docoument in the database
-const updateData = async (id) => {
-  const document = await Document.findOne({ docId: id });
-  // If document already exists, return it
-  if (document) {
-    return document;
-  }
+// Connect to MongoDB
+mongoose.connect(process.env.ATLAS_URI);
+mongoose.connection.once("open", () => {
+  console.log("Connected to the database!");
+});
 
-  // If the document doesn't exist, create a new one
-  const defaultValue = "";
-  return await Document.create({ docId: id, data: defaultValue });
-};
+// Socket.IO integration
+require("./socket")(io);
+
+// Start the server
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
