@@ -7,7 +7,6 @@ const Home = () => {
 
   useEffect(() => {
     axios.get("http://localhost:5000/doc").then(documents => {
-      console.log(documents.data)
       setDoc(documents.data);
     });
   }, [])
@@ -20,17 +19,19 @@ const Home = () => {
             <span className="material-symbols-outlined">add</span>
           </div>
         </Link>
-        {document?.map((doc,index) => {
+        {document?.map((doc, index) => {
           return (
-            <div className="tile" key={index}>
+            <Link to={"/documents/" + doc.docId} className="tile" key={index}>
               <div className="icon edit">
                 <span className="material-symbols-outlined">edit</span>
               </div>
               <div className="content">
                 <div className="heading">Title for the document</div>
-                <div className="date">Created: 12/04/23</div>
+                <div className="date">
+                  {new Date(doc.createdAt).toISOString().split('T')[0]}
+                </div>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>

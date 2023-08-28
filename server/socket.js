@@ -1,12 +1,12 @@
 const Document = require("./model/doc-model");
-
+const date=new Date();
 const updateData = async (id) => {
   const document = await Document.findOne({ docId: id });
   if (document) {
     return document;
   }
   const defaultValue = "";
-  return await Document.create({ docId: id, data: defaultValue });
+  return await Document.create({ docId: id, data: defaultValue, createdAt: date });
 };
 
 module.exports = (io) => {
