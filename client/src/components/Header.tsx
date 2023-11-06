@@ -1,16 +1,18 @@
-import logo from "../../src/assets/OIP.jpeg";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
     <nav className="header">
-      <a href="/" className="logo">
-        <img src={logo} alt="Logo" />
+      <Link to="/" className="logo">
+        <span className="material-symbols-outlined">
+          article
+        </span>
         <span>
           MB DOCS
         </span>
-      </a>
+      </Link>
       <div className="nav-list">
-        <a href="/logout" className="btn">Logout</a>
+        <Link to="/logout" className="btn">Logout</Link>
       </div>
     </nav>
   )

@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { DocumentType } from "../types/types";
 
 const Home = () => {
-  let [document, setDoc] = useState();
+  let [document, setDoc] = useState<DocumentType[]>();
 
   useEffect(() => {
     axios.get("http://localhost:5000/doc").then(documents => {

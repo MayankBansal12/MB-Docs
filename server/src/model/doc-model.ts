@@ -1,11 +1,12 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { DocumentType } from "../types";
 
-const Schema = new mongoose.Schema({
-  docId: String,
-  data: Object,
-  createdAt: Date,
+const DocumentSchema: Schema = new Schema<DocumentType>({
+  docId: { type: String, required: true },
+  data: { type: Object, required: true },
+  createdAt: { type: Date, required: true, default: Date.now },
 });
 
-const Document = mongoose.model("Document", Schema);
+const Document = mongoose.model<DocumentType>("Document", DocumentSchema);
 
 export default Document;

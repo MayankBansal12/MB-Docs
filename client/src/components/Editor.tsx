@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import Quill from "quill";
+import Quill, { Sources } from "quill";
 import "quill/dist/quill.snow.css";
-import { io } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 import { useParams } from 'react-router-dom';
 
 var toolbarOptions = [
@@ -26,8 +26,8 @@ var toolbarOptions = [
 ];
 
 const TextEditor = () => {
-    const [socket, setSocket] = useState();
-    const [quill, setQuill] = useState();
+    const [socket, setSocket] = useState<Socket>();
+    const [quill, setQuill] = useState<Quill>();
     const { id: documentId } = useParams();
 
     // Intializing/Connecting to socket server
@@ -56,9 +56,10 @@ const TextEditor = () => {
     useEffect(() => {
         if (socket == null || quill == null) return;
 
-        const handleChange = (delta, oldDelta, source) => {
+        const handleChange = (delta: any, oldDelta: any, source: Sources) => {
             if (source !== "user") return
             socket.emit("send", delta);
+            console.log(oldDelta);
         }
         quill.on("text-change", handleChange);
 
@@ -72,7 +73,7 @@ const TextEditor = () => {
     useEffect(() => {
         if (socket == null || quill == null) return
 
-        const handleChange = (delta) => {
+        const handleChange = (delta: any) => {
             quill.updateContents(delta);
         }
         socket.on("receive", handleChange);
@@ -96,7 +97,7 @@ const TextEditor = () => {
     }, [socket, quill]);
 
     // Intializing the quill editor
-    const wrapperRef = useCallback((wrapper) => {
+    const wrapperRef = useCallback((wrapper: HTMLDivElement) => {
         if (wrapper == null) return;
         wrapper.innerText = "";
         const editor = document.createElement("div");
