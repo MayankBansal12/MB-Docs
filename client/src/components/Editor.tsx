@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
-import "../assets/styles.css";
 import { io } from "socket.io-client";
 import { useParams } from 'react-router-dom';
 

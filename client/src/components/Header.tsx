@@ -1,5 +1,4 @@
-import React from "react";
-import logo from "../assets/img/OIP.jpeg";
+import logo from "../../src/assets/OIP.jpeg";
 
 const Header = () => {
   return (

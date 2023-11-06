@@ -1,25 +1,25 @@
-import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Home from "./Home";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import TextEditor from "./TextEditor";
+import Editor from "./Editor";
 import Login from "./Login";
 import Signup from "./Signup";
 import ResetPass from "./ResetPass";
-const { v4: uuidv4 } = require('uuid');
+
+import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route exact path="/" Component={Home} />
-        <Route exact path="/login" Component={Login}></Route>
-        <Route exact path="/signup" Component={Signup}></Route>
-        <Route exact path="/forgotpass" Component={ResetPass}></Route>
-        <Route exact path="/editor" element={<EditorRedirect />} />
-        <Route path="/documents/:id" Component={TextEditor} />
+        <Route path="/" Component={Home} />
+        <Route path="/login" Component={Login}></Route>
+        <Route path="/signup" Component={Signup}></Route>
+        <Route path="/forgotpass" Component={ResetPass}></Route>
+        <Route path="/editor" Component={EditorRedirect} />
+        <Route path="/documents/:id" Component={Editor} />
       </Routes>
       <Footer />
     </BrowserRouter>

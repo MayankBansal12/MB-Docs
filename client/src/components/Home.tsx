@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Home = () => {
@@ -19,9 +19,9 @@ const Home = () => {
             <span className="material-symbols-outlined">add</span>
           </div>
         </Link>
-        {document?.map((doc, index) => {
+        {document?.map((doc, i) => {
           return (
-            <Link to={"/documents/" + doc.docId} className="tile" key={index}>
+            <Link to={"/documents/" + doc.docId} className="tile" key={i}>
               <div className="icon edit">
                 <span className="material-symbols-outlined">edit</span>
               </div>
