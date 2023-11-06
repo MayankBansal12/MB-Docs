@@ -1,6 +1,8 @@
-const Document = require("./model/doc-model");
-const date=new Date();
-const updateData = async (id) => {
+import { Server, Socket } from 'socket.io';
+import Document from "./model/doc-model";
+const date = new Date();
+
+const updateData = async (id: String) => {
   const document = await Document.findOne({ docId: id });
   if (document) {
     return document;
@@ -9,9 +11,9 @@ const updateData = async (id) => {
   return await Document.create({ docId: id, data: defaultValue, createdAt: date });
 };
 
-module.exports = (io) => {
-  io.on("connection", (socket) => {
-    socket.on("create-document", async (documentId) => {
+const socket = (io: Server) => {
+  io.on("connection", (socket: Socket) => {
+    socket.on("create-document", async (documentId: string) => {
       const document = await updateData(documentId);
       socket.join(documentId);
       socket.emit("load-document", document.data);
@@ -26,3 +28,5 @@ module.exports = (io) => {
     });
   });
 };
+
+export default socket;

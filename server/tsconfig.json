@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                     // The ECMAScript version you are targeting
+    "module": "CommonJS",                // The module system for Node.js
+    "outDir": "./dist",                  // The output directory for compiled files
+    "rootDir": "./src",                  // The root directory of your source files
+    "strict": true,                      // Enable strict type checking
+    "esModuleInterop": true,             // Enable ES module interoperability
+    "forceConsistentCasingInFileNames": true, // Enforce consistent file naming
+    "removeComments": true,              // Remove comments from the output
+    "declaration": false,                 // Generate declaration files (.d.ts)
+    "sourceMap": false,                   // Generate source maps for debugging
+
+    "baseUrl": ".",                      // Base directory for resolving non-relative module names
+    "paths": {
+      "*": ["node_modules/*", "src/types/*"]
+    },
+
+    "typeRoots": ["./node_modules/@types", "./src/types"], // The location of type definition files
+
+    "lib": ["ES6"],                      // The libraries that are available to your code
+
+    "strictNullChecks": true,            // Enable strict null checks
+    "noImplicitAny": true,               // Disallow usage of the `any` type
+
+    // "resolveJsonModule": true,           // Allow importing JSON modules
+
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export
+
+    "noEmit": false,                     // Do not emit JavaScript files (this is for checking only)
+
+    "experimentalDecorators": true,      // Enable experimental decorators (if using decorators)
+
+    "skipLibCheck": true,                // Skip type checking of declaration files
+
+    "incremental": true,                 // Use incremental compilation
+    "tsBuildInfoFile": "./dist/.tsbuildinfo", // Path to the build info file for incremental builds
+    "moduleResolution": "Node",
+    // "allowImportingTsExtensions": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

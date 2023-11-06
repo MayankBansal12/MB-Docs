@@ -1,5 +1,6 @@
-const router = require("express").Router();
-const Documents = require("../model/doc-model");
+import { Router } from "express";
+import Documents from "../model/doc-model";
+const router=Router();
 
 // Documents Route
 router.get("/", async (req, res) => {
@@ -7,4 +8,4 @@ router.get("/", async (req, res) => {
   return res.json(documents);
 });
 
-module.exports = router;
+export default router;

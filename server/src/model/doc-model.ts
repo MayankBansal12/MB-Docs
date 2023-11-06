@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const Schema = new mongoose.Schema({
   docId: String,
@@ -7,4 +7,5 @@ const Schema = new mongoose.Schema({
 });
 
 const Document = mongoose.model("Document", Schema);
-module.exports = Document;
+
+export default Document;
