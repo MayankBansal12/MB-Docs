@@ -9,33 +9,34 @@ const Home = () => {
   useEffect(() => {
     axios.get("http://localhost:5000/doc").then(documents => {
       setDoc(documents.data);
+      console.log(documents.data);
     });
   }, [])
 
   return (
     <>
       <div className="container">
-        <Link className="tile" to="/editor">
-          <div className="icon">
-            <span className="material-symbols-outlined">add</span>
-          </div>
-        </Link>
         {document?.map((doc, i) => {
           return (
             <Link to={"/documents/" + doc.docId} className="tile" key={i}>
               <div className="icon edit">
-                <span className="material-symbols-outlined">edit</span>
+                <span className="material-symbols-outlined">description</span>
               </div>
               <div className="content">
-                <div className="heading">Title for the document</div>
+                <div className="heading">{doc.title}</div>
                 <div className="date">
-                  {new Date(doc.createdAt).toISOString().split('T')[0]}
+                  {new Date(doc.updatedAt).toISOString().split('T')[0]}
                 </div>
               </div>
             </Link>
           );
         })}
       </div>
+      <Link className="circle" to="/editor">
+        <div className="icon">
+          <span className="material-symbols-outlined">add</span>
+        </div>
+      </Link>
     </>
   )
 }

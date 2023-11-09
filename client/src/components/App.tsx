@@ -1,5 +1,5 @@
 import Header from "./Header";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import Home from "./Home";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Editor from "./Editor";
@@ -21,7 +21,6 @@ const App = () => {
         <Route path="/editor" Component={EditorRedirect} />
         <Route path="/documents/:id" Component={Editor} />
       </Routes>
-      <Footer />
     </BrowserRouter>
   )
 }

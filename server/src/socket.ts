@@ -23,7 +23,7 @@ const socket = (io: Server) => {
       });
 
       socket.on("save", async (data) => {
-        await Document.findOneAndUpdate({ docId: documentId }, { data: data });
+        await Document.findOneAndUpdate({ docId: documentId }, { data: data }, { updatedAt: new Date() });
       });
     });
   });

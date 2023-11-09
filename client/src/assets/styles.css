@@ -111,6 +111,21 @@ a {
     gap: 2rem 1.25rem;
 }
 
+.circle {
+    border-radius: 50%;
+    background-color: #323232;
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    height: 50px;
+    width: 50px;
+}
+
+.circle div span {
+    font-size: 2rem;
+    color: white;
+}
+
 .tile {
     position: relative;
     width: 210px;
