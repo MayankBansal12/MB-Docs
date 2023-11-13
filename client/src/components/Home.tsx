@@ -25,7 +25,7 @@ const Home = () => {
               <div className="content">
                 <div className="heading">{doc.title}</div>
                 <div className="date">
-                  {new Date(doc.updatedAt).toISOString().split('T')[0]}
+                  Last Updated: {new Date(doc.updatedAt).toISOString().split('T')[0]}
                 </div>
               </div>
             </Link>

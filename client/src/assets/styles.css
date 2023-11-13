@@ -114,11 +114,16 @@ a {
 .circle {
     border-radius: 50%;
     background-color: #323232;
-    position: absolute;
+    position: fixed;
     bottom: 2rem;
     right: 2rem;
     height: 50px;
     width: 50px;
+    box-shadow: 3px 3px 11px -1px #000000bf;
+    transition: all 0.3s;
+}
+.circle:hover{
+    transform: scale(1.1);
 }
 
 .circle div span {
