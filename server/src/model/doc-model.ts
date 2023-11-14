@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import { DocumentType } from "../types";
+import { IDocument } from "../types";
 
-const DocumentSchema: Schema = new Schema<DocumentType>({
+const DocumentSchema: Schema = new Schema<IDocument>({
   docId: { type: String, required: true },
   data: { type: Object, required: true },
   title: { type: String, required: true, default: "New Document" },
@@ -9,6 +9,6 @@ const DocumentSchema: Schema = new Schema<DocumentType>({
   updatedAt: { type: Date, required: true, default: Date.now },
 });
 
-const Document = mongoose.model<DocumentType>("Document", DocumentSchema);
+const Document = mongoose.model<IDocument>("Document", DocumentSchema);
 
 export default Document;

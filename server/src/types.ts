@@ -4,18 +4,18 @@ export type DocType = {
     docId: Types.ObjectId
 }
 
-export interface DocumentType extends Document {
-    docId: String,
-    title: String,
+export interface IDocument extends Document {
+    docId: string,
+    title: string,
     data: Record<string, any>,
     createdAt: Date,
     updatedAt: Date,
     userId: Types.ObjectId
 }
 
-export interface UserType extends Document {
-    name: String,
-    email: String,
-    passwd: String,
+export interface IUser extends Document {
+    name: string,
+    email: string,
+    passwd: string,
     docs: DocType[]
 }

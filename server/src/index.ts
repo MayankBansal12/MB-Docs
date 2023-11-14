@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-const db=process.env.ATLAS_URI || "";
+const db = process.env.ATLAS_URI || "";
 mongoose.connect(db);
 mongoose.connection.once("open", () => {
   console.log("Connected to the database!");
@@ -31,7 +31,9 @@ socket(io);
 
 // Connect to routes
 import docRouter from "./routes/docRouter";
+import userRouter from "./routes/userRouter";
 app.use("/doc", docRouter);
+app.use("/user", userRouter);
 
 // Start the server
 server.listen(PORT, () => {
