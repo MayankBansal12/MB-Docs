@@ -1,24 +1,42 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
+const backend = import.meta.env.VITE_SERVER;
 
 const Signup = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [passwd, setPasswd] = useState("");
     const [confirm, setConfirm] = useState("");
+    const navigate = useNavigate();
 
-    const handleSignup = (e: React.FormEvent<HTMLFormElement>) => {
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            navigate("/");
+        }
+    }, [])
+
+    const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
         // Logic for User signup here
         e.preventDefault();
-        const details = {
-            email, password, name
+        const input = {
+            email, passwd, name
         }
-        console.log(details);
+        try {
+            await axios.post(backend + "/user/signup", input);
+            navigate("/login");
+        } catch (error) {
+            console.error("Eror while sign up! ", error);
+        }
     }
 
     return (
         <div className="auth-form">
-            <h1>Sign Up</h1>
+            <div className="form-heading">
+                <h1>Signup</h1>
+                <p>Signup and Setup your account now and start creating documents.</p>
+            </div>
             <form onSubmit={handleSignup}>
                 <input
                     type="text"
@@ -36,10 +54,10 @@ const Signup = () => {
                 />
                 <input
                     type="password"
-                    value={password}
+                    value={passwd}
                     placeholder="Password for it. Make it strong dude!"
                     required
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setPasswd(e.target.value)}
                 />
                 <input
                     type="password"
@@ -48,7 +66,7 @@ const Signup = () => {
                     onChange={(e) => setConfirm(e.target.value)}
                     required
                 />
-                {confirm === password ? <button type="submit">Sign Up</button> : <p className="error-message">Please confirm your password before signing up</p>}
+                {confirm === passwd ? <button type="submit">Sign Up</button> : <p className="error-message">Please confirm your password before signing up</p>}
             </form>
             <p>
                 Already a user? <Link to="/login">Login</Link>

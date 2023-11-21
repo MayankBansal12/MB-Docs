@@ -26,6 +26,11 @@ a {
     color: rgb(197, 4, 4);
 }
 
+.info-btn{
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
 /* Header */
 .header {
     padding-inline: 1rem;
@@ -206,6 +211,17 @@ a {
     gap: 1.5rem;
 }
 
+.auth-form .form-heading{
+    text-align: center;
+    margin-block: 1rem;
+}
+
+.form-heading p{
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    color: rgb(80, 80, 80);
+}
+
 .auth-form form {
     display: flex;
     flex-direction: column;
@@ -218,7 +234,7 @@ a {
     width: 50%;
     background: transparent;
     padding: 0.5rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
     outline: none;
     border-radius: 5px;
     box-shadow: 5px 5px 5px 0px black;
@@ -229,7 +245,8 @@ a {
 }
 
 .auth-form button {
-    color: black;
+    color: #f3f3f3;
+    background-color: #323232;
     padding: 0.5rem;
     font-size: 1rem;
     border: 2px solid #323232;
@@ -261,10 +278,12 @@ footer {
     align-items: flex-end;
 }
 
-
-
 @media screen and (max-width: 768px) {
     .auth-form input {
         width: 90%;
+    }
+    .container{
+        padding-inline: 1rem;
+        justify-content: center;
     }
 }

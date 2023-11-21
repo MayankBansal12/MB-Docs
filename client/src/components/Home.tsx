@@ -1,11 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DocumentType } from "../types/types";
 import Header from "./Header";
 
 const Home = () => {
   let [document, setDoc] = useState<DocumentType[]>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [])
 
   useEffect(() => {
     axios.get("http://localhost:5000/doc").then(documents => {

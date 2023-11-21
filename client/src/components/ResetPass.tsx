@@ -10,7 +10,10 @@ const ResetPass = () => {
 
     return (
         <div className="auth-form">
-            <h1>Forgot Password</h1>
+            <div className="form-heading">
+                <h1>Forgot Password?</h1>
+                <p>Enter your email below and look out for the instructions on your email!</p>
+            </div>
             <form>
                 <input
                     type="email"

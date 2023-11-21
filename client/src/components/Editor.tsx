@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Quill, { Sources } from "quill";
 import "quill/dist/quill.snow.css";
 import { Socket, io } from "socket.io-client";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
 
 var toolbarOptions = [
@@ -30,6 +30,14 @@ const TextEditor = () => {
     const [socket, setSocket] = useState<Socket>();
     const [quill, setQuill] = useState<Quill>();
     const { id: documentId } = useParams();
+    const navigate=useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login");
+        }
+      }, [])
 
     // Intializing/Connecting to socket server
     useEffect(() => {
