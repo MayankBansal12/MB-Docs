@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DocumentType } from "../types/types";
+import Header from "./Header";
 
 const Home = () => {
   let [document, setDoc] = useState<DocumentType[]>();
@@ -15,6 +16,7 @@ const Home = () => {
 
   return (
     <>
+      <Header />
       <div className="container">
         {document?.map((doc, i) => {
           return (

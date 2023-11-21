@@ -20,6 +20,12 @@ a {
     color: #323232;
 }
 
+.error-message{
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    color: rgb(197, 4, 4);
+}
+
 /* Header */
 .header {
     padding-inline: 1rem;
@@ -209,13 +215,17 @@ a {
 }
 
 .auth-form input {
-    width: 40%;
+    width: 50%;
     background: transparent;
     padding: 0.5rem;
     font-size: 1rem;
     outline: none;
     border-radius: 5px;
     box-shadow: 5px 5px 5px 0px black;
+}
+
+.auth-form input:focus{
+    box-shadow: 1px 1px 3px 2px rgba(0, 0, 0, 0.95);
 }
 
 .auth-form button {

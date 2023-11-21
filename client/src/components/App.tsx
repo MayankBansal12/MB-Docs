@@ -1,5 +1,3 @@
-import Header from "./Header";
-// import Footer from "./Footer";
 import Home from "./Home";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Editor from "./Editor";
@@ -12,7 +10,6 @@ import { v4 as uuidv4 } from 'uuid';
 const App = () => {
   return (
     <BrowserRouter>
-      <Header />
       <Routes>
         <Route path="/" Component={Home} />
         <Route path="/login" Component={Login}></Route>

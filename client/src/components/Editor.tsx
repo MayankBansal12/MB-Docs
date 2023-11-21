@@ -3,6 +3,7 @@ import Quill, { Sources } from "quill";
 import "quill/dist/quill.snow.css";
 import { Socket, io } from "socket.io-client";
 import { useParams } from 'react-router-dom';
+import Header from './Header';
 
 var toolbarOptions = [
     [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -118,7 +119,10 @@ const TextEditor = () => {
     }, []);
 
     return (
-        <div className="text-editor" ref={wrapperRef}></div>
+        <>
+            <Header />
+            <div className="text-editor" ref={wrapperRef}></div>
+        </>
     )
 }
 

@@ -1,31 +1,36 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [show, setShow] = useState(false);
 
-    const handleLogin = () => {
-        // Handle User Login here
+    const handleLogin = (e: React.FormEvent<HTMLElement>) => {
+        e.preventDefault();
+        console.log(email, password);
     }
 
     return (
         <div className="auth-form">
             <h1>Login</h1>
-            <form>
+            <form onSubmit={handleLogin}>
                 <input
                     type="email"
                     value={email}
-                    placeholder="user@gmail.com"
+                    required
+                    placeholder="Enter Email. Eg:- user@gmail.com"
                     onChange={(e) => setEmail(e.target.value)}
                 />
                 <input
-                    type="password"
+                    type={show ? "text" : "password"}
                     value={password}
-                    placeholder="user123"
+                    required
+                    placeholder="Enter your password. Eg:- user123"
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button type="button" onClick={handleLogin}>Login</button>
+                {password && <div onClick={() => setShow(!show)} style={{ cursor: "pointer" }}>Click to {show ? "hide" : "view"} password</div>}
+                <button type="submit">Login</button>
             </form>
             <div className="links">
                 <p>
