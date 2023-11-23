@@ -7,11 +7,9 @@ import jwt from "jsonwebtoken";
 const secret = process.env.SECRET || "";
 const router = Router();
 
-router.route("/").get((req, res) => {
-    res.send("User Routes working!!");
-})
 
-router.route("/user/:userId").get(async (req, res) => {
+// /user/:userId
+router.route("/:userId").get(async (req, res) => {
     const { userId } = req.params;
     if (!userId) {
         return res.status(400).json({ msg: "Invalid Request!" });
@@ -28,10 +26,11 @@ router.route("/user/:userId").get(async (req, res) => {
     }
 });
 
+// /user/signup -> For new account/signup
 router.route("/signup").post(async (req, res) => {
     const { name, email, passwd } = req.body;
-    if (!email) {
-        return res.status(400).json({ msg: "Email not provided!" });
+    if (!email || !name || !passwd) {
+        return res.status(400).json({ msg: "Details not provided!" });
     }
     try {
         const user = await User.findOne({ email: email });
@@ -45,11 +44,13 @@ router.route("/signup").post(async (req, res) => {
             passwd: hashedPasswd
         })
         await newUser.save();
+        return res.status(200).json({ msg: "User signed up successfully!", user: newUser });
     } catch (error) {
         return res.status(500).json({ msg: "Internal Server Error", error });
     }
 })
 
+// /user/login -> Login using email and passwd
 router.route("/login").post(async (req, res) => {
     const { email, passwd } = req.body;
     if (!email || !passwd) {

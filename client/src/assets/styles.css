@@ -20,13 +20,13 @@ a {
     color: #323232;
 }
 
-.error-message{
+.error-message {
     font-size: 0.8rem;
     margin-top: 1rem;
     color: rgb(197, 4, 4);
 }
 
-.info-btn{
+.info-btn {
     font-size: 0.9rem;
     cursor: pointer;
 }
@@ -122,6 +122,13 @@ a {
     gap: 2rem 1.25rem;
 }
 
+.data-info {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
 .circle {
     border-radius: 50%;
     background-color: #323232;
@@ -133,7 +140,8 @@ a {
     box-shadow: 3px 3px 11px -1px #000000bf;
     transition: all 0.3s;
 }
-.circle:hover{
+
+.circle:hover {
     transform: scale(1.1);
 }
 
@@ -211,12 +219,12 @@ a {
     gap: 1.5rem;
 }
 
-.auth-form .form-heading{
+.auth-form .form-heading {
     text-align: center;
     margin-block: 1rem;
 }
 
-.form-heading p{
+.form-heading p {
     font-size: 0.9rem;
     margin-top: 0.5rem;
     color: rgb(80, 80, 80);
@@ -240,7 +248,7 @@ a {
     box-shadow: 5px 5px 5px 0px black;
 }
 
-.auth-form input:focus{
+.auth-form input:focus {
     box-shadow: 1px 1px 3px 2px rgba(0, 0, 0, 0.95);
 }
 
@@ -282,7 +290,8 @@ footer {
     .auth-form input {
         width: 90%;
     }
-    .container{
+
+    .container {
         padding-inline: 1rem;
         justify-content: center;
     }

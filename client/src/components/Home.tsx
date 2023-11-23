@@ -1,32 +1,30 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { DocumentType } from "../types/types";
 import Header from "./Header";
+import makeRequest from "../utils/api";
 
 const Home = () => {
   let [document, setDoc] = useState<DocumentType[]>();
   const navigate = useNavigate();
 
+  const fetchData = async () => {
+    const res = await makeRequest("GET", "/doc");
+    setDoc(res?.data?.documents);
+  }
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
-    }
-  }, [])
-
-  useEffect(() => {
-    axios.get("http://localhost:5000/doc").then(documents => {
-      setDoc(documents.data);
-      console.log(documents.data);
-    });
+    } else fetchData();
   }, [])
 
   return (
     <>
       <Header />
       <div className="container">
-        {document?.map((doc, i) => {
+        {document && document.length > 0 ? document?.map((doc, i) => {
           return (
             <Link to={"/documents/" + doc.docId} className="tile" key={i}>
               <div className="icon edit">
@@ -40,7 +38,10 @@ const Home = () => {
               </div>
             </Link>
           );
-        })}
+        })
+          :
+          <div className="data-info">No Documents to show...Create new document and write your ideas, thoughts and collaborate with your friends...Start now by clicking on the button below </div>
+        }
       </div>
       <Link className="circle" to="/editor">
         <div className="icon">
