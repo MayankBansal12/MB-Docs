@@ -1,11 +1,30 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import User from "../model/user-model";
 import { IUser } from "../types";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { authUser } from "../middlewares/userAuth";
 
 const secret = process.env.SECRET || "";
 const router = Router();
+
+// For setting req.user as user, otherwise ts shows error as it can of any type
+interface RequestWithUser extends Request {
+    user?: IUser;
+}
+
+// /user -> Fetch user details using the token
+router.route("/").get(authUser, async (req: RequestWithUser, res: Response) => {
+    if (!req.user || !req.user._id) {
+        return res.status(400).json({ msg: "Invalid Request!" });
+    }
+    try {
+        const user = await User.findById(req.user._id).select("-passwd");
+        return res.status(200).json({ msg: "User Found!", user });
+    } catch (error) {
+        return res.status(500).json({ msg: "Internal Server Error", error });
+    }
+})
 
 // /user/:userId -> Fetch user details for that userId
 router.route("/:userId").get(async (req, res) => {

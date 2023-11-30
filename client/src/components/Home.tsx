@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { DocumentType } from "../types/types";
+import { DocumentType, UserType } from "../types/types";
 import Header from "./Header";
 import makeRequest from "../utils/api";
 
 const Home = () => {
   let [document, setDoc] = useState<DocumentType[]>();
+  const [user, setUser] = useState<UserType>();
+
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -13,16 +15,24 @@ const Home = () => {
     setDoc(res?.data?.documents);
   }
 
+  const fetchUser = async () => {
+    const res = await makeRequest("GET", "/user");
+    setUser(res?.data?.user);
+  }
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
-    } else fetchData();
+    } else {
+      fetchUser();
+      fetchData();
+    }
   }, [])
 
   return (
     <>
-      <Header page="home" />
+      <Header page="home" user={user} />
       <div className="container">
         {document && document.length > 0 ? document?.map((doc, i) => {
           return (

@@ -22,7 +22,7 @@ router.route("/")
       }
       return res.status(200).json({ msg: "Successfully fetched!", documents: documents });
     } catch (error) {
-      return res.status(500).json({ msg: "Internal Server Error!" });
+      return res.status(500).json({ msg: "Internal Server Error!", error });
     }
   });
 
@@ -37,19 +37,24 @@ router.route("/:docId")
       }
       return res.status(200).json({ msg: "Successfully fetched!", document: doc });
     } catch (error) {
-      return res.status(500).json({ msg: "Internal Server Error!" });
+      return res.status(500).json({ msg: "Internal Server Error!", error });
     }
   })
   .put(authUser, async (req: RequestWithUser, res: Response) => {
     const { docId } = req.params;
+    let { title } = req.body;
+    if (title.trim() === "") {
+      title = "New Document";
+    }
+
     try {
-      let doc = await Document.findOneAndUpdate({ docId: docId }, { title: req.body.title });
+      let doc = await Document.findOneAndUpdate({ docId: docId }, { title: title });
       if (!doc) {
         return res.status(404).json({ msg: "Document not found!" });
       }
       return res.status(200).json({ msg: "Successfully updated!" });
     } catch (error) {
-      return res.status(500).json({ msg: "Internal Server Error!" });
+      return res.status(500).json({ msg: "Internal Server Error!", error });
     }
   })
   .delete(authUser, async (req: RequestWithUser, res: Response) => {
@@ -61,7 +66,7 @@ router.route("/:docId")
       }
       return res.status(200).json({ msg: "Successfully deleted!" });
     } catch (error) {
-      return res.status(500).json({ msg: "Internal Server Error!" });
+      return res.status(500).json({ msg: "Internal Server Error!", error });
     }
   });
 
