@@ -2,7 +2,7 @@ import axios from "axios";
 
 const backend = import.meta.env.VITE_SERVER;
 
-const makeRequest = async (method = "GET", endpoint: string, data = null) => {
+const makeRequest = async (method = "GET", endpoint: string, data: Object | null = null) => {
     const token = localStorage.getItem("token");
     if (!token) {
         (window as any).location = "/login"

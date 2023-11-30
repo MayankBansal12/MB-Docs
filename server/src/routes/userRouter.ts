@@ -7,15 +7,14 @@ import jwt from "jsonwebtoken";
 const secret = process.env.SECRET || "";
 const router = Router();
 
-
-// /user/:userId
+// /user/:userId -> Fetch user details for that userId
 router.route("/:userId").get(async (req, res) => {
     const { userId } = req.params;
     if (!userId) {
         return res.status(400).json({ msg: "Invalid Request!" });
     }
     try {
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).select("-passwd");
         if (user) {
             return res.status(200).json({ msg: "User details fetched successfully!", user: user });
         } else {

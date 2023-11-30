@@ -4,7 +4,9 @@ import "quill/dist/quill.snow.css";
 import { Socket, io } from "socket.io-client";
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from './Header';
+const token = localStorage.getItem("token");
 
+const backend = import.meta.env.VITE_SERVER;
 var toolbarOptions = [
     [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -30,18 +32,18 @@ const TextEditor = () => {
     const [socket, setSocket] = useState<Socket>();
     const [quill, setQuill] = useState<Quill>();
     const { id: documentId } = useParams();
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
+    // Checking for user token
     useEffect(() => {
-        const token = localStorage.getItem("token");
         if (!token) {
-          navigate("/login");
+            navigate("/login");
         }
-      }, [])
+    }, [])
 
     // Intializing/Connecting to socket server
     useEffect(() => {
-        const newSocket = io("http://localhost:5000");
+        const newSocket = io(backend);
         setSocket(newSocket);
 
         return () => {
@@ -58,7 +60,7 @@ const TextEditor = () => {
             quill.enable();
         });
 
-        socket.emit("create-document", documentId);
+        socket.emit("create-document", documentId, token);
     }, [socket, quill, documentId])
 
     // Sending the change to server whenever user types 
@@ -68,7 +70,6 @@ const TextEditor = () => {
         const handleChange = (delta: any, oldDelta: any, source: Sources) => {
             if (source !== "user") return
             socket.emit("send", delta);
-            console.log(oldDelta);
         }
         quill.on("text-change", handleChange);
 
