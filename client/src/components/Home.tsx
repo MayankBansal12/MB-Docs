@@ -22,7 +22,7 @@ const Home = () => {
 
   return (
     <>
-      <Header />
+      <Header page="home" />
       <div className="container">
         {document && document.length > 0 ? document?.map((doc, i) => {
           return (

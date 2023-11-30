@@ -17,7 +17,49 @@ router.route("/")
   .get(authUser, async (req: RequestWithUser, res: Response) => {
     try {
       let documents = await Documents.find({ userId: req.user?._id });
+      if (!documents) {
+        return res.status(404).json({ msg: "Documents not found!", documents: null });
+      }
       return res.status(200).json({ msg: "Successfully fetched!", documents: documents });
+    } catch (error) {
+      return res.status(500).json({ msg: "Internal Server Error!" });
+    }
+  });
+
+// /doc :-> Performing operations based on the docId
+router.route("/:docId")
+  .get(authUser, async (req: RequestWithUser, res: Response) => {
+    const { docId } = req.params;
+    try {
+      let doc = await Document.findOne({ docId: docId }).select("title");
+      if (!doc) {
+        return res.status(404).json({ msg: "Document not found!", document: null });
+      }
+      return res.status(200).json({ msg: "Successfully fetched!", document: doc });
+    } catch (error) {
+      return res.status(500).json({ msg: "Internal Server Error!" });
+    }
+  })
+  .put(authUser, async (req: RequestWithUser, res: Response) => {
+    const { docId } = req.params;
+    try {
+      let doc = await Document.findOneAndUpdate({ docId: docId }, { title: req.body.title });
+      if (!doc) {
+        return res.status(404).json({ msg: "Document not found!" });
+      }
+      return res.status(200).json({ msg: "Successfully updated!" });
+    } catch (error) {
+      return res.status(500).json({ msg: "Internal Server Error!" });
+    }
+  })
+  .delete(authUser, async (req: RequestWithUser, res: Response) => {
+    const { docId } = req.params;
+    try {
+      let doc = await Document.findOneAndDelete({ docId: docId });
+      if (!doc) {
+        return res.status(404).json({ msg: "Document not found!" });
+      }
+      return res.status(200).json({ msg: "Successfully deleted!" });
     } catch (error) {
       return res.status(500).json({ msg: "Internal Server Error!" });
     }

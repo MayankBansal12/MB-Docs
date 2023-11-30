@@ -129,7 +129,7 @@ const TextEditor = () => {
 
     return (
         <>
-            <Header />
+            <Header page="editor" />
             <div className="text-editor" ref={wrapperRef}></div>
         </>
     )
