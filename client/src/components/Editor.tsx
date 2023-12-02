@@ -32,14 +32,13 @@ const TextEditor = () => {
     const [socket, setSocket] = useState<Socket>();
     const [quill, setQuill] = useState<Quill>();
     const { id: documentId } = useParams();
-    const navigate = useNavigate();
 
     // Checking for user token
-    useEffect(() => {
-        if (!token) {
-            navigate("/login");
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (!token) {
+    //         navigate("/login");
+    //     }
+    // }, [])
 
     // Intializing/Connecting to socket server
     useEffect(() => {

@@ -73,7 +73,7 @@ a {
     padding: 0.5rem 1rem;
     border-radius: 5px;
     cursor: pointer;
-    background-color: #fff;
+    background-color: #bcbcbc;
     color: rgb(35, 31, 31);
     border: none;
     font-size: 1rem;
@@ -81,6 +81,7 @@ a {
 }
 
 .btn-dark:hover {
+    background-color: #fff;
     transform: scale(1);
     box-shadow: 1px 1px 5px 0px rgb(35, 31, 31);
 }
@@ -92,14 +93,15 @@ a {
     gap: 0.5rem;
     background: transparent;
     border: none;
-    color: #fff;
+    color: #bcbcbc;
     font-size: 1rem;
 }
 
 .header-profile:hover {
     cursor: pointer;
-    transform: scale(1.001);
-    transition: all 0.3s ease;
+    color: #fff;
+    transform: scale(1);
+    transition: all 0.3s ease-in-out;
 }
 
 .header-title {
@@ -125,6 +127,63 @@ a {
     cursor: pointer;
     transition: all 0.3s ease;
 }
+
+.popup {
+    background-color: #fff;
+    color: rgb(35, 31, 31);
+    position: absolute;
+    top: 8.5%;
+    right: 1.5%;
+    z-index: 10;
+    padding: 0.25rem;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.popup-home {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-item {
+    padding: 1rem;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.popup-item:hover {
+    background: #e0e0e0;
+}
+
+.confirm-logout {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding-block: 0.25rem;
+}
+
+.logout-false {
+    color: red;
+    border: 2px dotted red;
+}
+
+.logout-true {
+    color: green;
+    border: 1px solid green;
+}
+
+.logout-true,
+.logout-false {
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.logout-true:hover,
+.logout-false:hover {
+    font-weight: bold;
+}
+
 
 /* Editor */
 .text-editor .ql-toolbar {

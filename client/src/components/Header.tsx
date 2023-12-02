@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import makeRequest from "../utils/api";
 import { UserType } from "../types/types";
+import Popup from "./Popup";
 
 type HeaderProps = {
   page: string
@@ -10,9 +11,16 @@ type HeaderProps = {
 
 const Header = ({ page, user }: HeaderProps) => {
   const [editTitle, setEditTitle] = useState(false);
+  const [showPopup, setShowPopup] = useState(false)
   const [title, setTitle] = useState("New Document");
   const { id: documentId } = useParams();
 
+  // For toggling popup in case of header
+  const togglePopup = () => {
+    setShowPopup(!showPopup);
+  }
+
+  // To fetch title in case of editor page
   const getTitle = async () => {
     const res = await makeRequest("GET", `/doc/${documentId}`);
     setTitle(res.data?.document?.title);
@@ -25,6 +33,7 @@ const Header = ({ page, user }: HeaderProps) => {
     }
   }, []);
 
+  // Save title in case user updates
   const saveTitle = async () => {
     setEditTitle(false);
     await makeRequest("PUT", `/doc/${documentId}`, { title })
@@ -56,18 +65,21 @@ const Header = ({ page, user }: HeaderProps) => {
             </span>}
           </button>
         </div>
-        <button className="btn-dark">Share</button>
+        <button className="btn-dark" onClick={togglePopup}>Share</button>
+
       </>}
 
       {/* Profile Option */}
       {page === "home" && <>
-        <button className="header-profile">
+        <button className="header-profile" onClick={togglePopup}>
           <p>{user?.name}</p>
           <span className="material-symbols-outlined">
             account_circle
           </span>
         </button>
       </>}
+
+      {showPopup && <Popup page={page} />}
     </nav>
   )
 }
