@@ -146,6 +146,45 @@ a {
     flex-direction: column;
 }
 
+.popup-editor {
+    padding: 0.5rem;
+    min-width: 300px;
+    width: 40vw;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.popup-editor div {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.popup-editor input {
+    font-size: 1rem;
+    width: 95%;
+    padding: 0.25rem;
+    border-radius: 5px;
+}
+
+.popup-editor button {
+    background: #bcbcbc2b;
+    border: 1px dotted rgb(35, 31, 31);
+    padding: 0.1rem;
+    color: rgb(35, 31, 31);
+    transition: all 0.3s ease-in-out;
+    border-radius: 5px;
+}
+
+.popup-editor button:hover {
+    transform: scale(1);
+    cursor: pointer;
+    color: black;
+    background: #fff;
+}
+
 .popup-item {
     padding: 1rem;
     transition: all 0.3s;
