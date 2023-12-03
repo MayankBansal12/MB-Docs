@@ -14,17 +14,62 @@ interface RequestWithUser extends Request {
 }
 
 // /user -> Fetch user details using the token
-router.route("/").get(authUser, async (req: RequestWithUser, res: Response) => {
-    if (!req.user || !req.user._id) {
-        return res.status(400).json({ msg: "Invalid Request!" });
-    }
-    try {
-        const user = await User.findById(req.user._id).select("-passwd");
-        return res.status(200).json({ msg: "User Found!", user });
-    } catch (error) {
-        return res.status(500).json({ msg: "Internal Server Error", error });
-    }
-})
+router.route("/")
+    .get(authUser, async (req: RequestWithUser, res: Response) => {
+        if (!req.user || !req.user._id) {
+            return res.status(400).json({ msg: "Invalid Request!" });
+        }
+        try {
+            const user = await User.findById(req.user._id).select("-passwd");
+            if (!user) {
+                return res.status(404).json({ msg: "User not found!", user: null });
+            }
+            return res.status(200).json({ msg: "User Found!", user });
+        } catch (error) {
+            return res.status(500).json({ msg: "Internal Server Error", error });
+        }
+    })
+    .put(authUser, async (req: RequestWithUser, res: Response) => {
+        try {
+            if (!req.user || !req.user._id) {
+                return res.status(400).json({ msg: "Invalid Request!" });
+            }
+
+            let { email, name, passwd } = req.body;
+
+            if (!email || !name) {
+                return res.status(400).json({ msg: "Invalid inputs. Email and name required!" });
+            }
+
+            const user = await User.findOne({ email });
+
+            if (!user) {
+                return res.status(404).json({ msg: "Can't find user!" });
+            }
+
+            if (!user._id.equals(req.user._id)) {
+                return res.status(403).json({ msg: "Unauthorized Request!" });
+            }
+
+            if (passwd !== "") {
+                passwd = await bcrypt.hash(passwd, 10);
+            }
+
+            const update = await User.findOneAndUpdate(
+                { _id: user._id },
+                { email, name, ...(passwd !== "" && { passwd }) },
+                { new: true }
+            );
+
+            if (!update) {
+                return res.status(400).json({ msg: "Error while updating the user details!" });
+            }
+
+            return res.status(200).json({ msg: "User details updated!" });
+        } catch (error) {
+            return res.status(500).json({ msg: "Internal Server Error" });
+        }
+    });
 
 // /user/:userId -> Fetch user details for that userId
 router.route("/:userId").get(async (req, res) => {

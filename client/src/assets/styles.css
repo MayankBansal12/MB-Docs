@@ -73,7 +73,7 @@ a {
     padding: 0.5rem 1rem;
     border-radius: 5px;
     cursor: pointer;
-    background-color: #bcbcbc;
+    background-color: #ccc;
     color: rgb(35, 31, 31);
     border: none;
     font-size: 1rem;
@@ -121,11 +121,16 @@ a {
     border-radius: 3px;
 }
 
+.title-btn {
+    background: #ccc;
+    transition: all 0.3s ease;
+}
+
 .title-btn:hover {
-    transform: scale(1.001);
+    transform: scale(0.99);
+    background: #fff;
     color: #000;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
 .popup {
@@ -393,7 +398,8 @@ a {
     align-items: center;
 }
 
-.auth-form input {
+.auth-form input,
+.profile-form input {
     width: 50%;
     background: transparent;
     padding: 0.5rem;
@@ -403,11 +409,13 @@ a {
     box-shadow: 5px 5px 5px 0px black;
 }
 
-.auth-form input:focus {
+.auth-form input:focus,
+.profile-form input:focus {
     box-shadow: 1px 1px 3px 2px rgba(0, 0, 0, 0.95);
 }
 
-.auth-form button {
+.auth-form button,
+.profile-form button {
     color: #f3f3f3;
     background-color: #323232;
     padding: 0.5rem;
@@ -421,9 +429,52 @@ a {
     transition: all 0.4s;
 }
 
-button:hover {
+.auth-form button:hover,
+.profile-form button:hover {
     transform: scale(1.1);
 }
+
+/* Edit User profile */
+.profile-header {
+    display: flex;
+    gap: 0.25rem;
+    height: fit-content;
+    padding: 1.5rem 2rem 0rem;
+}
+
+.profile-container {
+    justify-content: space-around;
+    padding-inline: 3rem;
+}
+
+.profile-container>div {
+    display: flex;
+    flex-direction: column;
+    padding-inline: 1rem;
+    height: fit-content;
+    align-items: center;
+    color: #bcbcbc;
+}
+
+.profile-container div span {
+    font-size: 5rem;
+    height: 85px;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.profile-form input {
+    width: 60vw;
+    height: 45px;
+}
+
 
 /* Footer */
 footer {
@@ -459,5 +510,9 @@ footer {
 @media screen and (max-width: 425px) {
     .header-title {
         width: 30%;
+    }
+
+    .profile-container>div {
+        padding-inline: 0rem;
     }
 }

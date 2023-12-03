@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Quill, { Sources } from "quill";
 import "quill/dist/quill.snow.css";
 import { Socket, io } from "socket.io-client";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Header from './Header';
 const token = localStorage.getItem("token");
 
@@ -32,13 +32,6 @@ const TextEditor = () => {
     const [socket, setSocket] = useState<Socket>();
     const [quill, setQuill] = useState<Quill>();
     const { id: documentId } = useParams();
-
-    // Checking for user token
-    // useEffect(() => {
-    //     if (!token) {
-    //         navigate("/login");
-    //     }
-    // }, [])
 
     // Intializing/Connecting to socket server
     useEffect(() => {

@@ -4,6 +4,7 @@ import Editor from "./Editor";
 import Login from "./Login";
 import Signup from "./Signup";
 import ResetPass from "./ResetPass";
+import EditProfile from "./EditProfile";
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/forgotpass" Component={ResetPass}></Route>
         <Route path="/editor" Component={EditorRedirect} />
         <Route path="/documents/:id" Component={Editor} />
+        <Route path="/edit-profile" Component={EditProfile} />
       </Routes>
     </BrowserRouter>
   )
