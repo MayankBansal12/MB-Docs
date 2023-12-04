@@ -1,5 +1,6 @@
-import { useState } from "react"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import Noty from "noty";
 const frontend = import.meta.env.VITE_CLIENT;
 
 type PopupProps = {
@@ -11,9 +12,33 @@ const Popup = ({ page }: PopupProps) => {
     const [showLogout, setShowLogout] = useState(false);
     const { id: docId } = useParams();
 
+    // Noty js notification
+    const successNoty = new Noty({
+        text: "User logged out!",
+        type: "success",
+        theme: "semanticui",
+        timeout: 3000,
+    });
+
+    const copyNoty = new Noty({
+        text: "Link Copied!",
+        type: "info",
+        theme: "semanticui",
+        timeout: 1500,
+    });
+
+    const errorCopyNoty = new Noty({
+        text: "Error while copying, try again!",
+        type: "error",
+        theme: "semanticui",
+        timeout: 2000,
+    });
+
+
     // Remove the token and redirect to login route
     const logoutUser = () => {
         localStorage.removeItem("token");
+        successNoty.show();
         navigate("/login");
     }
 
@@ -23,10 +48,10 @@ const Popup = ({ page }: PopupProps) => {
 
         navigator.clipboard.writeText(textToCopy)
             .then(() => {
-                console.log('Text successfully copied to clipboard');
+                copyNoty.show();
             })
-            .catch((err) => {
-                console.error('Unable to copy text to clipboard', err);
+            .catch(() => {
+                errorCopyNoty.show();
             });
     };
 

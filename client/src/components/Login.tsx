@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Noty from "noty";
 const backend = import.meta.env.VITE_SERVER;
 
 const Login = () => {
@@ -8,6 +9,14 @@ const Login = () => {
     const [passwd, setPasswd] = useState("");
     const [show, setShow] = useState(false);
     const navigate = useNavigate();
+
+    // Noty js notification
+    const successNoty = new Noty({
+        text: "Login Successful!",
+        type: "success",
+        theme: "semanticui",
+        timeout: 3000,
+    });
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -24,14 +33,21 @@ const Login = () => {
         try {
             const response = await axios.post(backend + "/user/login", input);
             if (response.status === 200) {
+                successNoty.show();
                 const token = response.data.token
                 if (token) {
                     localStorage.setItem("token", token)
                     navigate("/");
                 }
             }
-        } catch (error) {
-            console.error("Eror while logging in! ", error);
+        } catch (error: any) {
+            const errorNoty = new Noty({
+                text: error?.response?.data?.msg || "Incorrect email or password!",
+                type: "error",
+                theme: "semanticui",
+                timeout: 3000,
+            });
+            errorNoty.show();
         }
     }
 

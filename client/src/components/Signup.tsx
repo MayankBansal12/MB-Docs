@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import Noty from "noty";
 const backend = import.meta.env.VITE_SERVER;
 
 const Signup = () => {
@@ -9,6 +10,14 @@ const Signup = () => {
     const [passwd, setPasswd] = useState("");
     const [confirm, setConfirm] = useState("");
     const navigate = useNavigate();
+
+    // Noty js notification
+    const successNoty = new Noty({
+        text: "User Signup Successful!",
+        type: "success",
+        theme: "semanticui",
+        timeout: 3000,
+    });
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -25,9 +34,16 @@ const Signup = () => {
         }
         try {
             await axios.post(backend + "/user/signup", input);
+            successNoty.show();
             navigate("/login");
-        } catch (error) {
-            console.error("Eror while sign up! ", error);
+        } catch (error: any) {
+            const errorNoty = new Noty({
+                text: error?.response?.data?.msg || "Error while signing up, try again!",
+                type: "error",
+                theme: "semanticui",
+                timeout: 3000,
+            });
+            errorNoty.show();
         }
     }
 

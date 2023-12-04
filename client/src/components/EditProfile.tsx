@@ -3,6 +3,7 @@ import Header from "./Header"
 import makeRequest from "../utils/api";
 import { useEffect, useState } from "react";
 import { UserType } from "../types/types";
+import Noty from "noty";
 
 const EditProfile = () => {
     const [user, setUser] = useState<UserType>();
@@ -10,10 +11,23 @@ const EditProfile = () => {
     const [passwd, setPasswd] = useState("");
     const [confirm, setConfirm] = useState("");
 
+    // Noty js notification
+    const successNoty = new Noty({
+        text: "Profile Updated!",
+        type: "success",
+        theme: "semanticui",
+        timeout: 3000,
+    });
+    const errorNoty = new Noty({
+        text: "Error while updating the profile, try again!",
+        type: "error",
+        theme: "semanticui",
+        timeout: 3000,
+    });
+
     const fetchUserDetails = async () => {
         const res = await makeRequest("GET", "/user");
         setUser(res.data.user);
-        console.log(res.data.user);
     }
 
     const updateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,10 +35,9 @@ const EditProfile = () => {
         const email = user?.email;
         const res = await makeRequest("PUT", "/user", { name, email, passwd });
         if (res.status === 200) {
-            console.log("Profile Updated!");
-            window.location.reload();
+            successNoty.show();
         } else {
-            console.log("Error while updating the profile!");
+            errorNoty.show();
         }
     }
 
