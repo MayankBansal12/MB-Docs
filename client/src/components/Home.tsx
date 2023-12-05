@@ -3,23 +3,26 @@ import { Link, useNavigate } from "react-router-dom";
 import { DocumentType, UserType } from "../types/types";
 import Header from "./Header";
 import makeRequest from "../utils/api";
+import DocTile from "./DocTile";
 
 const Home = () => {
   let [document, setDoc] = useState<DocumentType[]>();
   const [user, setUser] = useState<UserType>();
-
   const navigate = useNavigate();
 
+  // Fetch all the docs for that user
   const fetchData = async () => {
     const res = await makeRequest("GET", "/doc");
     setDoc(res?.data?.documents);
   }
 
+  // Fetch User details
   const fetchUser = async () => {
     const res = await makeRequest("GET", "/user");
     setUser(res?.data?.user);
   }
 
+  // check for user token and fetch details
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -34,19 +37,10 @@ const Home = () => {
     <>
       <Header page="home" user={user} />
       <div className="container">
+        {/* <div className="popup-overlay"></div> */}
         {document && document.length > 0 ? document?.map((doc, i) => {
           return (
-            <Link to={"/documents/" + doc.docId} className="tile" key={i}>
-              <div className="icon edit">
-                <span className="material-symbols-outlined">description</span>
-              </div>
-              <div className="content">
-                <div className="heading">{doc.title}</div>
-                <div className="date">
-                  Last Opened: {new Date(doc.updatedAt).toISOString().split('T')[0]}
-                </div>
-              </div>
-            </Link>
+            <DocTile doc={doc} key={i} />
           );
         })
           :

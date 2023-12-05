@@ -60,10 +60,10 @@ const Popup = ({ page }: PopupProps) => {
             {page === "home" && <div className="popup-home">
                 <span className="popup-item"><Link to="/edit-profile" >Edit Profile</Link></span>
                 <span className="popup-item" onClick={() => setShowLogout(!showLogout)}>Logout</span>
-                {showLogout && <div className="confirm-logout">
-                    <span className="material-symbols-outlined logout-false" onClick={() => setShowLogout(false)}>
+                {showLogout && <div className="confirm-popup">
+                    <span className="material-symbols-outlined confirm-false" onClick={() => setShowLogout(false)}>
                         close</span>
-                    <span className="material-symbols-outlined logout-true" onClick={logoutUser}>
+                    <span className="material-symbols-outlined confirm-true" onClick={logoutUser}>
                         check
                     </span>
                 </div>}

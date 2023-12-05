@@ -2,7 +2,7 @@ import { Router } from "express";
 import { Request, Response } from "express";
 import Documents from "../model/doc-model";
 import { authUser } from "../middlewares/userAuth";
-import { IDocument, IUser } from "../types";
+import { IUser } from "../types";
 import Document from "../model/doc-model";
 
 const router = Router();
@@ -16,7 +16,7 @@ interface RequestWithUser extends Request {
 router.route("/")
   .get(authUser, async (req: RequestWithUser, res: Response) => {
     try {
-      let documents = await Documents.find({ userId: req.user?._id });
+      const documents = await Documents.find({ userId: req.user?._id });
       if (!documents) {
         return res.status(404).json({ msg: "Documents not found!", documents: null });
       }
@@ -26,12 +26,12 @@ router.route("/")
     }
   });
 
-// /doc :-> Performing operations based on the docId
+// /doc/:docId :-> Performing operations based on the docId
 router.route("/:docId")
   .get(authUser, async (req: RequestWithUser, res: Response) => {
     const { docId } = req.params;
     try {
-      let doc = await Document.findOne({ docId: docId }).select("title");
+      const doc = await Document.findOne({ docId: docId }).select("title");
       if (!doc) {
         return res.status(404).json({ msg: "Document not found!", document: null });
       }
@@ -48,7 +48,7 @@ router.route("/:docId")
     }
 
     try {
-      let doc = await Document.findOneAndUpdate({ docId: docId }, { title: title });
+      const doc = await Document.findOneAndUpdate({ docId: docId }, { title: title });
       if (!doc) {
         return res.status(404).json({ msg: "Document not found!" });
       }
@@ -59,8 +59,9 @@ router.route("/:docId")
   })
   .delete(authUser, async (req: RequestWithUser, res: Response) => {
     const { docId } = req.params;
+
     try {
-      let doc = await Document.findOneAndDelete({ docId: docId });
+      const doc = await Document.findOneAndDelete({ docId });
       if (!doc) {
         return res.status(404).json({ msg: "Document not found!" });
       }
