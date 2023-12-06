@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
-import Noty from "noty";
+import { notify } from '../utils/notification';
 const backend = import.meta.env.VITE_SERVER;
 
 const Signup = () => {
@@ -11,14 +11,7 @@ const Signup = () => {
     const [confirm, setConfirm] = useState("");
     const navigate = useNavigate();
 
-    // Noty js notification
-    const successNoty = new Noty({
-        text: "User Signup Successful!",
-        type: "success",
-        theme: "semanticui",
-        timeout: 3000,
-    });
-
+    // If the token already exists, then navigate to home page
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -26,6 +19,7 @@ const Signup = () => {
         }
     }, [])
 
+    // Handle signup for the user
     const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
         // Logic for User signup here
         e.preventDefault();
@@ -34,16 +28,10 @@ const Signup = () => {
         }
         try {
             await axios.post(backend + "/user/signup", input);
-            successNoty.show();
+            notify("User Signup Successful!", "success");
             navigate("/login");
         } catch (error: any) {
-            const errorNoty = new Noty({
-                text: error?.response?.data?.msg || "Error while signing up, try again!",
-                type: "error",
-                theme: "semanticui",
-                timeout: 3000,
-            });
-            errorNoty.show();
+            notify(error?.response?.data?.msg || "Error while signing up, try again!", "error");
         }
     }
 

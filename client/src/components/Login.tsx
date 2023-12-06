@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Noty from "noty";
+import { notify } from "../utils/notification";
 const backend = import.meta.env.VITE_SERVER;
 
 const Login = () => {
@@ -10,14 +10,7 @@ const Login = () => {
     const [show, setShow] = useState(false);
     const navigate = useNavigate();
 
-    // Noty js notification
-    const successNoty = new Noty({
-        text: "Login Successful!",
-        type: "success",
-        theme: "semanticui",
-        timeout: 3000,
-    });
-
+    // Navigate to home page if token exists
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -25,6 +18,7 @@ const Login = () => {
         }
     }, [])
 
+    // Handle login for the user
     const handleLogin = async (e: React.FormEvent<HTMLElement>) => {
         e.preventDefault();
         const input = {
@@ -33,7 +27,7 @@ const Login = () => {
         try {
             const response = await axios.post(backend + "/user/login", input);
             if (response.status === 200) {
-                successNoty.show();
+                notify("Login Successful!", "success");
                 const token = response.data.token
                 if (token) {
                     localStorage.setItem("token", token)
@@ -41,13 +35,7 @@ const Login = () => {
                 }
             }
         } catch (error: any) {
-            const errorNoty = new Noty({
-                text: error?.response?.data?.msg || "Incorrect email or password!",
-                type: "error",
-                theme: "semanticui",
-                timeout: 3000,
-            });
-            errorNoty.show();
+            notify(error?.response?.data?.msg || "Incorrect email or password!", "error");
         }
     }
 

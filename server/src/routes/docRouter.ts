@@ -16,7 +16,7 @@ interface RequestWithUser extends Request {
 router.route("/")
   .get(authUser, async (req: RequestWithUser, res: Response) => {
     try {
-      const documents = await Documents.find({ userId: req.user?._id });
+      const documents = await Documents.find({ userId: req.user?._id }).select("-data");
       if (!documents) {
         return res.status(404).json({ msg: "Documents not found!", documents: null });
       }

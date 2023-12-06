@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Noty from "noty";
 import makeRequest from "../utils/api";
 import { UserType } from "../types/types";
 import Popup from "./Popup";
+import { notify } from "../utils/notification";
 
 type HeaderProps = {
   page: string
@@ -15,20 +15,6 @@ const Header = ({ page, user }: HeaderProps) => {
   const [showPopup, setShowPopup] = useState(false)
   const [title, setTitle] = useState("New Document");
   const { id: documentId } = useParams();
-
-  // Noty js notification
-  const successNoty = new Noty({
-    text: "Title Updated!",
-    type: "success",
-    theme: "semanticui",
-    timeout: 1500,
-  });
-  const errorNoty = new Noty({
-    text: "Error while updating, try again!",
-    type: "error",
-    theme: "semanticui",
-    timeout: 1500,
-  });
 
   // For toggling popup in case of header
   const togglePopup = () => {
@@ -53,9 +39,9 @@ const Header = ({ page, user }: HeaderProps) => {
     setEditTitle(false);
     const res = await makeRequest("PUT", `/doc/${documentId}`, { title })
     if (res.status === 200) {
-      successNoty.show();
+      notify("Title Updated!", "success", 1500);
     } else {
-      errorNoty.show();
+      notify("Error while updating, try again!", "error", 1500);
     }
     if (title === "")
       setTitle("New Document");

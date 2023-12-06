@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { DocumentType } from "../types/types";
 import makeRequest from "../utils/api";
-import Noty from "noty";
+import { notify } from "../utils/notification";
 
 type tileProps = {
     doc: DocumentType
@@ -12,27 +12,14 @@ const DocTile = ({ doc }: tileProps) => {
     const [showPopup, setShowPopup] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
 
-    const successNoty = new Noty({
-        text: "Doc deleted successfully!",
-        type: "success",
-        theme: "semanticui",
-        timeout: 3000,
-    });
-    const errorNoty = new Noty({
-        text: "Error while deleting, try again!",
-        type: "error",
-        theme: "semanticui",
-        timeout: 3000,
-    });
-
-    const deleteDoc = async (e: React.FormEvent<HTMLElement>) => {
-        e.preventDefault();
+    // Delete the selected doc
+    const deleteDoc = async () => {
         const res = await makeRequest("DELETE", "/doc/" + doc.docId, doc)
         if (res.status === 200) {
-            successNoty.show();
+            notify("Doc deleted successfully!", "success")
             window.location.reload();
         } else {
-            errorNoty.show();
+            notify("Error while deleting, try again!", "error");
         }
     }
 
@@ -52,18 +39,12 @@ const DocTile = ({ doc }: tileProps) => {
                     e.preventDefault();
                     setShowPopup(!showPopup);
                 }}>more_vert</button>
-                {showPopup && <div className="popup doc-popup">
+                {showPopup && <div className="popup doc-popup" onClick={(e) => e.preventDefault()}>
                     <div className="popup-home">
-                        <span className="popup-item" onClick={(e) => e.preventDefault()}>More Info</span>
-                        <span className="popup-item" onClick={(e) => {
-                            e.preventDefault();
-                            setShowDelete(!showDelete)
-                        }}>Delete</span>
+                        <span className="popup-item">More Info</span>
+                        <span className="popup-item" onClick={() => setShowDelete(!showDelete)}>Delete</span>
                         {showDelete && <div className="confirm-popup">
-                            <span className="material-symbols-outlined confirm-false" onClick={(e) => {
-                                e.preventDefault();
-                                setShowDelete(false)
-                            }}>
+                            <span className="material-symbols-outlined confirm-false" onClick={() => setShowDelete(false)}>
                                 close</span>
                             <span className="material-symbols-outlined confirm-true" onClick={deleteDoc}>
                                 check
