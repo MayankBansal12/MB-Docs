@@ -1,16 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DocumentType } from "../types/types";
 import makeRequest from "../utils/api";
 import { notify } from "../utils/notification";
+import { useRecoilState } from "recoil";
+import { popupAtom } from "../atom/popup";
 
 type tileProps = {
     doc: DocumentType
 }
 
 const DocTile = ({ doc }: tileProps) => {
+    const [popup, setPopup] = useRecoilState(popupAtom);
     const [showPopup, setShowPopup] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
+
+    useEffect(() => {
+        if (popup.show === false && showPopup) {
+            setShowPopup(false);
+        }
+    }, [popup.show])
 
     // Delete the selected doc
     const deleteDoc = async () => {
@@ -37,9 +46,10 @@ const DocTile = ({ doc }: tileProps) => {
                 </div>
                 <button className="material-symbols-outlined doc-menu-btn" onClick={(e) => {
                     e.preventDefault();
-                    setShowPopup(!showPopup);
+                    setShowPopup(true);
+                    setPopup({ show: true });
                 }}>more_vert</button>
-                {showPopup && <div className="popup doc-popup" onClick={(e) => e.preventDefault()}>
+                {showPopup && popup.show && <div className="popup doc-popup" onClick={(e) => e.preventDefault()}>
                     <div className="popup-home">
                         <span className="popup-item">More Info</span>
                         <span className="popup-item" onClick={() => setShowDelete(!showDelete)}>Delete</span>

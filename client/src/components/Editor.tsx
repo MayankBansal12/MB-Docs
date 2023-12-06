@@ -4,8 +4,10 @@ import "quill/dist/quill.snow.css";
 import { Socket, io } from "socket.io-client";
 import { useParams } from 'react-router-dom';
 import Header from './Header';
-const token = localStorage.getItem("token");
+import { useRecoilState } from "recoil";
+import { popupAtom } from "../atom/popup";
 
+const token = localStorage.getItem("token");
 const backend = import.meta.env.VITE_SERVER;
 var toolbarOptions = [
     [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -32,6 +34,7 @@ const TextEditor = () => {
     const [socket, setSocket] = useState<Socket>();
     const [quill, setQuill] = useState<Quill>();
     const { id: documentId } = useParams();
+    const [popup, setPopup] = useRecoilState(popupAtom)
 
     // Intializing/Connecting to socket server
     useEffect(() => {
@@ -122,6 +125,7 @@ const TextEditor = () => {
     return (
         <>
             <Header page="editor" />
+            {popup.show && <div className="popup-overlay" onClick={() => setPopup({ show: false })}></div>}
             <div className="text-editor" ref={wrapperRef}></div>
         </>
     )

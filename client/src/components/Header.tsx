@@ -4,6 +4,8 @@ import makeRequest from "../utils/api";
 import { UserType } from "../types/types";
 import Popup from "./Popup";
 import { notify } from "../utils/notification";
+import { popupAtom } from "../atom/popup";
+import { useRecoilState } from "recoil";
 
 type HeaderProps = {
   page: string
@@ -13,19 +15,26 @@ type HeaderProps = {
 const Header = ({ page, user }: HeaderProps) => {
   const [editTitle, setEditTitle] = useState(false);
   const [showPopup, setShowPopup] = useState(false)
+  const [popup, setPopup] = useRecoilState(popupAtom)
   const [title, setTitle] = useState("New Document");
   const { id: documentId } = useParams();
-
-  // For toggling popup in case of header
-  const togglePopup = () => {
-    setShowPopup(!showPopup);
-  }
 
   // To fetch title in case of editor page
   const getTitle = async () => {
     const res = await makeRequest("GET", `/doc/${documentId}`);
     setTitle(res.data?.document?.title);
   }
+
+  const handlePopup = () => {
+    setPopup({ show: true });
+    setShowPopup(true);
+  }
+
+  useEffect(() => {
+    if (popup.show === false && showPopup) {
+      setShowPopup(false);
+    }
+  }, [popup.show])
 
   // If current page is editor then fetch title for doc
   useEffect(() => {
@@ -71,13 +80,12 @@ const Header = ({ page, user }: HeaderProps) => {
             </span>}
           </button>
         </div>
-        <button className="btn-dark" onClick={togglePopup}>Share</button>
-
+        <button className="btn-dark" onClick={handlePopup}>Share</button>
       </>}
 
       {/* Profile Option */}
       {page === "home" && <>
-        <button className="header-profile" onClick={togglePopup}>
+        <button className="header-profile" onClick={handlePopup}>
           <p>{user?.name}</p>
           <span className="material-symbols-outlined">
             account_circle
@@ -85,7 +93,7 @@ const Header = ({ page, user }: HeaderProps) => {
         </button>
       </>}
 
-      {showPopup && <Popup page={page} />}
+      {popup.show && showPopup && <Popup page={page} />}
     </nav>
   )
 }

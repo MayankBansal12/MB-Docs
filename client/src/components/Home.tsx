@@ -4,11 +4,14 @@ import { DocumentType, UserType } from "../types/types";
 import Header from "./Header";
 import makeRequest from "../utils/api";
 import DocTile from "./DocTile";
+import { useRecoilState } from "recoil";
+import { popupAtom } from "../atom/popup";
 
 const Home = () => {
   let [document, setDoc] = useState<DocumentType[]>();
   const [user, setUser] = useState<UserType>();
   const navigate = useNavigate();
+  const [popup, setPopup] = useRecoilState(popupAtom)
 
   // Fetch all the docs for that user
   const fetchData = async () => {
@@ -37,7 +40,7 @@ const Home = () => {
     <>
       <Header page="home" user={user} />
       <div className="container">
-        {/* <div className="popup-overlay"></div> */}
+        {popup.show && <div className="popup-overlay" onClick={() => setPopup({ show: false })}></div>}
         {document && document.length > 0 ? document?.map((doc, i) => {
           return (
             <DocTile doc={doc} key={i} />
