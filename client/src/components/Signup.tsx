@@ -9,6 +9,7 @@ const Signup = () => {
     const [email, setEmail] = useState("");
     const [passwd, setPasswd] = useState("");
     const [confirm, setConfirm] = useState("");
+    const [submitted, setSubmitted] = useState(false);
     const navigate = useNavigate();
 
     // If the token already exists, then navigate to home page
@@ -21,7 +22,7 @@ const Signup = () => {
 
     // Handle signup for the user
     const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
-        // Logic for User signup here
+        setSubmitted(true);
         e.preventDefault();
         const input = {
             email, passwd, name
@@ -31,6 +32,7 @@ const Signup = () => {
             notify("User Signup Successful!", "success");
             navigate("/login");
         } catch (error: any) {
+            setSubmitted(false);
             notify(error?.response?.data?.msg || "Error while signing up, try again!", "error");
         }
     }
@@ -70,7 +72,7 @@ const Signup = () => {
                     onChange={(e) => setConfirm(e.target.value)}
                     required
                 />
-                {confirm === passwd ? <button type="submit">Sign Up</button> : <p className="error-message">Please confirm your password before signing up</p>}
+                {confirm === passwd ? <button type="submit" disabled={submitted}>Sign Up</button> : <p className="error-message">Please confirm your password before signing up</p>}
             </form>
             <p>
                 Already a user? <Link to="/login">Login</Link>

@@ -1,31 +1,61 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { notify } from '../utils/notification';
+const backend = import.meta.env.VITE_SERVER;
 
 const ResetPass = () => {
-    const [email, setEmail] = useState('');
+    const location = useLocation();
+    const userToken = new URLSearchParams(location.search).get('token');
+    const [passwd, setPasswd] = useState("");
+    const [confirm, setConfirm] = useState("");
+    const [submitted, setSubmitted] = useState(false);
+    const navigate = useNavigate();
 
-    const handleResetPassword = () => {
-        // Reset password logic here
-    };
+    // If the token already exists, then navigate to home page
+    useEffect(() => {
+        if (!userToken) {
+            navigate("/login");
+        }
+    }, [])
+
+    // Handle Password reset 
+    const handleReset = async (e: React.FormEvent<HTMLFormElement>) => {
+        setSubmitted(true);
+        e.preventDefault();
+        try {
+            await axios.put(backend + "/user/reset", { passwd, userToken });
+            notify("Password Changed!", "success");
+            navigate("/login");
+        } catch (error: any) {
+            setSubmitted(false);
+            notify(error?.response?.data?.msg || "Error while changing password, try again!", "error");
+        }
+    }
 
     return (
         <div className="auth-form">
             <div className="form-heading">
-                <h1>Forgot Password?</h1>
-                <p>Enter your email below and look out for the instructions on your email!</p>
+                <h1>Reset Password</h1>
+                <p>Change your account's password. Don't forget this time though.</p>
             </div>
-            <form>
+            <form onSubmit={handleReset}>
                 <input
-                    type="email"
-                    value={email}
-                    placeholder="Enter your Email"
-                    onChange={(e) => setEmail(e.target.value)}
+                    type="password"
+                    value={passwd}
+                    placeholder="Account Password. Make it strong dude!"
+                    required
+                    onChange={(e) => setPasswd(e.target.value)}
                 />
-                <button type="button" onClick={handleResetPassword} disabled>Send!</button>
+                <input
+                    type="password"
+                    placeholder="Confirm your Password"
+                    value={confirm}
+                    onChange={(e) => setConfirm(e.target.value)}
+                    required
+                />
+                {confirm === passwd ? <button type="submit" disabled={submitted}>Update</button> : <p className="error-message">Please confirm your password before changing.</p>}
             </form>
-            <p>
-                Retry Login Again? <Link to="/login">Login</Link>
-            </p>
         </div>
     );
 };

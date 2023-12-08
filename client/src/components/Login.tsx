@@ -7,6 +7,7 @@ const backend = import.meta.env.VITE_SERVER;
 const Login = () => {
     const [email, setEmail] = useState("");
     const [passwd, setPasswd] = useState("");
+    const [submitted, setSubmitted] = useState(false);
     const [show, setShow] = useState(false);
     const navigate = useNavigate();
 
@@ -20,6 +21,7 @@ const Login = () => {
 
     // Handle login for the user
     const handleLogin = async (e: React.FormEvent<HTMLElement>) => {
+        setSubmitted(true);
         e.preventDefault();
         const input = {
             email, passwd
@@ -34,8 +36,10 @@ const Login = () => {
                     navigate("/");
                 }
             }
+            setSubmitted(false)
         } catch (error: any) {
-            notify(error?.response?.data?.msg || "Incorrect email or password!", "error");
+            notify(error?.response?.data?.msg || "Some Error occured, try again!", "error");
+            setSubmitted(false)
         }
     }
 
@@ -61,7 +65,7 @@ const Login = () => {
                     onChange={(e) => setPasswd(e.target.value)}
                 />
                 {passwd && <div onClick={() => setShow(!show)} className="info-btn">Click to {show ? "hide" : "view"} password</div>}
-                <button type="submit">Login</button>
+                <button type="submit" disabled={submitted}>Login</button>
             </form>
             <div className="links">
                 <p>

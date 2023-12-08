@@ -9,15 +9,17 @@ import 'noty/lib/noty.css';
 import "noty/lib/themes/semanticui.css";
 
 import { v4 as uuidv4 } from 'uuid';
+import ForgotPass from "./ForgotPass";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" Component={Home} />
-        <Route path="/login" Component={Login}></Route>
-        <Route path="/signup" Component={Signup}></Route>
-        <Route path="/forgotpass" Component={ResetPass}></Route>
+        <Route path="/login" Component={Login} />
+        <Route path="/signup" Component={Signup} />
+        <Route path="/forgotpass" Component={ForgotPass} />
+        <Route path="/resetpass" Component={ResetPass} />
         <Route path="/editor" Component={EditorRedirect} />
         <Route path="/documents/:id" Component={Editor} />
         <Route path="/edit-profile" Component={EditProfile} />

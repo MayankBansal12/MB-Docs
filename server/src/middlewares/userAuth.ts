@@ -21,7 +21,7 @@ const authUser = async (req: RequestWithUser, res: Response, next: NextFunction)
         const user = await User.findById(decoded?.id)
 
         if (!user) {
-            return res.status(404).json({ msg: "User not found! Invalid Request!", token: false, valid: false });
+            return res.status(404).json({ msg: "User not found! Invalid Request!", token: true, valid: false });
         }
         req.user = user
         next();

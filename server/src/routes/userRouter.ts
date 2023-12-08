@@ -4,14 +4,26 @@ import { IUser } from "../types";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { authUser } from "../middlewares/userAuth";
+import nodemailer from "nodemailer";
 
 const secret = process.env.SECRET || "";
+const frontend = process.env.CLIENT_URL;
+const serverEmail = process.env.SERVER_EMAIL;
+const password = process.env.SERVER_PASSWORD;
 const router = Router();
 
 // For setting req.user as user, otherwise ts shows error as it can of any type
 interface RequestWithUser extends Request {
     user?: IUser;
 }
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: serverEmail,
+        pass: password,
+    },
+});
 
 // /user -> Fetch user details using the token
 router.route("/")
@@ -132,6 +144,100 @@ router.route("/login").post(async (req, res) => {
         return res.status(200).json({ msg: "Login successful", token: token });
     } catch (error) {
         return res.status(500).json({ msg: "Internal Server Error", error });
+    }
+})
+
+// /user/forgotpass -> Send email instructions to reset user pass
+router.route("/forgotpass").post(async (req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+        return res.status(404).json({ msg: "User not found! Please check your email" });
+    }
+    const token = jwt.sign({ id: user._id }, secret, { expiresIn: '10m' });
+    const resetLink = frontend + "/resetpass?token=" + token;
+
+    const mailOptions = {
+        from: serverEmail,
+        to: email,
+        subject: "Reset your Account Password - MB Docs!",
+        html:
+            `<html>
+            <head>
+                <style>
+                    body {
+                        font-family: 'Arial', sans-serif;
+                        margin: 0;
+                        padding: 0;
+                        background-color: #f4f4f4;
+                    }
+                    .container {
+                        width: 100%;
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        background-color: #ffffff;
+                        border-top: 1px solid #dddddd;
+                    }
+                    h1 {
+                        color: #333333;
+                    }
+                    p {
+                        color: #555555;
+                    }
+                    a {
+                        color: #007BFF;
+                        text-decoration: none;
+                        font-weight: bold;
+                    }
+                    .footer {
+                        margin-top: 20px;
+                        padding-top: 10px;
+                        border-top: 1px solid #dddddd;
+                        text-align: center;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>MB Docs</h1>
+                    <p>To reset your account password, click <a href="${resetLink}">here</a>.</p>
+                    <p>Note: The link is only valid for 10 minutes.</p>
+                </div>
+                <div class="container footer">
+                    <p>&copy; 2023 MB Docs. All rights reserved.</p>
+                </div>
+            </body>
+        </html>`,
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: 'Reset email sent successfully.' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error sending reset email.' });
+    }
+})
+
+// /user/reset -> Reset user passwd
+router.route("/reset").put(async (req, res) => {
+    const { passwd, userToken: token } = req.body;
+    if (!token) {
+        return res.status(401).json({ msg: "Token Missing" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, secret) as IUser;
+        const hashedPasswd = await bcrypt.hash(passwd, 10);
+        const user = await User.findByIdAndUpdate(decoded?.id, { passwd: hashedPasswd })
+
+        if (!user) {
+            return res.status(404).json({ msg: "Token is invalid!" });
+        }
+        return res.status(200).json({ msg: "Password Reset Successful!" });
+    } catch (error) {
+        return res.status(400).json({ msg: "Token is either invalid or expired!" });
     }
 })
 
