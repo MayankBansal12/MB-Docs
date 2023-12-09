@@ -64,6 +64,7 @@ const TextEditor = () => {
 
         const handleChange = (delta: any, oldDelta: any, source: Sources) => {
             if (source !== "user") return
+            console.log(oldDelta);
             socket.emit("send", delta);
         }
         quill.on("text-change", handleChange);
