@@ -4,8 +4,10 @@ const backend = import.meta.env.VITE_SERVER;
 
 const makeRequest = async (method = "GET", endpoint: string, data: Object | null = null) => {
     const token = localStorage.getItem("token");
+    const documentId = window.location.pathname.split('/').pop();
+
     if (!token) {
-        (window as any).location = "/login"
+        (window as any).location = `/login?docId=${documentId}`
     }
     try {
         const config = {

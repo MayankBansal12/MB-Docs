@@ -6,7 +6,7 @@ const backend = import.meta.env.VITE_SERVER;
 
 const ResetPass = () => {
     const location = useLocation();
-    const userToken = new URLSearchParams(location.search).get('token');
+    const userToken = new URLSearchParams(location.search).get("token");
     const [passwd, setPasswd] = useState("");
     const [confirm, setConfirm] = useState("");
     const [submitted, setSubmitted] = useState(false);
