@@ -43,7 +43,9 @@ const DocTile = ({ doc, onDelete }: tileProps) => {
                         <span className="popup-item" onClick={() => window.open("/documents/" + doc.docId, "_blank")}>Open in New Tab
                             <span className="material-symbols-outlined">open_in_new</span>
                         </span>
-                        <span className="popup-item" onClick={() => setShowDelete(!showDelete)}>Delete Doc</span>
+                        <span className="popup-item" onClick={() => setShowDelete(!showDelete)}>Delete Doc
+                            <span className="material-symbols-outlined">delete</span>
+                        </span>
                         {showDelete && <div className="confirm-popup">
                             <span className="material-symbols-outlined confirm-false" onClick={() => setShowDelete(false)}>
                                 close</span>
