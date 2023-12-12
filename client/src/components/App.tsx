@@ -5,13 +5,21 @@ import Login from "./Login";
 import Signup from "./Signup";
 import ResetPass from "./ResetPass";
 import EditProfile from "./EditProfile";
-import 'noty/lib/noty.css';
-import "noty/lib/themes/semanticui.css";
-
 import { v4 as uuidv4 } from 'uuid';
 import ForgotPass from "./ForgotPass";
+import { useEffect } from "react";
+import 'noty/lib/noty.css';
+import "noty/lib/themes/semanticui.css";
+import axios from "axios";
+const backend = import.meta.env.VITE_SERVER;
 
 const App = () => {
+
+  // Cold start for the server
+  useEffect(() => {
+    axios.get(backend + "/")
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DocumentType } from "../types/types";
-import makeRequest from "../utils/api";
-import { notify } from "../utils/notification";
 import { useRecoilState } from "recoil";
 import { popupAtom } from "../atom/popup";
 
 type tileProps = {
-    doc: DocumentType
+    doc: DocumentType,
+    onDelete: Function
 }
 
-const DocTile = ({ doc }: tileProps) => {
+const DocTile = ({ doc, onDelete }: tileProps) => {
     const [popup, setPopup] = useRecoilState(popupAtom);
     const [showPopup, setShowPopup] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
@@ -18,19 +17,9 @@ const DocTile = ({ doc }: tileProps) => {
     useEffect(() => {
         if (popup.show === false && showPopup) {
             setShowPopup(false);
+            setShowDelete(false);
         }
     }, [popup.show])
-
-    // Delete the selected doc
-    const deleteDoc = async () => {
-        const res = await makeRequest("DELETE", "/doc/" + doc.docId, doc)
-        if (res.status === 200) {
-            notify("Doc deleted successfully!", "success")
-            window.location.reload();
-        } else {
-            notify("Error while deleting, try again!", "error");
-        }
-    }
 
     return (
         <Link to={"/documents/" + doc.docId} className="tile">
@@ -56,7 +45,7 @@ const DocTile = ({ doc }: tileProps) => {
                         {showDelete && <div className="confirm-popup">
                             <span className="material-symbols-outlined confirm-false" onClick={() => setShowDelete(false)}>
                                 close</span>
-                            <span className="material-symbols-outlined confirm-true" onClick={deleteDoc}>
+                            <span className="material-symbols-outlined confirm-true" onClick={() => onDelete(doc)}>
                                 check
                             </span>
                         </div>}

@@ -10,7 +10,7 @@ const Login = () => {
     const [submitted, setSubmitted] = useState(false);
     const [show, setShow] = useState(false);
     const navigate = useNavigate();
-    const docId = new URLSearchParams(location.search).get("docId");
+    const redirect = new URLSearchParams(location.search).get("redirect");
 
     // Navigate to home page if token exists
     useEffect(() => {
@@ -34,10 +34,12 @@ const Login = () => {
                 const token = response.data.token
                 if (token) {
                     localStorage.setItem("token", token)
-                    if (!docId)
+                    if (!redirect)
                         navigate("/");
+                    else if (redirect === "edit-profile")
+                        navigate("/edit-profile");
                     else
-                        navigate("/documents/" + docId);
+                        navigate("/documents/" + redirect);
                 }
             }
             setSubmitted(false)

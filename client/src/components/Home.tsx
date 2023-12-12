@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { DocumentType, UserType } from "../types/types";
 import Header from "./Header";
-import makeRequest from "../utils/api";
 import DocTile from "./DocTile";
+import makeRequest from "../utils/api";
+import { notify } from "../utils/notification";
 import { useRecoilState } from "recoil";
 import { popupAtom } from "../atom/popup";
 
@@ -25,6 +26,18 @@ const Home = () => {
     setUser(res?.data?.user);
   }
 
+  // Delete the selected doc
+  const deleteDoc = async (doc: DocumentType) => {
+    const res = await makeRequest("DELETE", "/doc/" + doc.docId, doc)
+    if (res.status === 200) {
+      setDoc((prevDoc) => prevDoc?.filter(d => d.docId !== doc.docId));
+      setPopup({ show: false });
+      notify("Doc deleted successfully!", "success")
+    } else {
+      notify("Error while deleting, try again!", "error");
+    }
+  }
+
   // check for user token and fetch details
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -43,7 +56,7 @@ const Home = () => {
         {popup.show && <div className="popup-overlay" onClick={() => setPopup({ show: false })}></div>}
         {document && document.length > 0 ? document?.map((doc, i) => {
           return (
-            <DocTile doc={doc} key={i} />
+            <DocTile doc={doc} key={i} onDelete={deleteDoc} />
           );
         })
           :

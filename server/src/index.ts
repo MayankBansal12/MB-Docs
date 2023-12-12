@@ -6,11 +6,17 @@ import mongoose from "mongoose";
 require("dotenv").config();
 
 const PORT = process.env.PORT || 5000;
+const local_url=process.env.CLIENT_URL || "";
+const prod_url=process.env.CLIENT_PROD_URL || "";
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: [
+      local_url,
+      prod_url
+    ],
   },
 });
 
@@ -32,6 +38,11 @@ socket(io);
 // Connect to routes
 import docRouter from "./routes/docRouter";
 import userRouter from "./routes/userRouter";
+
+app.get("/", (req, res) => {
+  res.send("Working!");
+})
+
 app.use("/doc", docRouter);
 app.use("/user", userRouter);
 
