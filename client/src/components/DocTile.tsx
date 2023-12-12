@@ -40,8 +40,10 @@ const DocTile = ({ doc, onDelete }: tileProps) => {
                 }}>more_vert</button>
                 {showPopup && popup.show && <div className="popup doc-popup" onClick={(e) => e.preventDefault()}>
                     <div className="popup-home">
-                        <span className="popup-item">More Info</span>
-                        <span className="popup-item" onClick={() => setShowDelete(!showDelete)}>Delete</span>
+                        <span className="popup-item" onClick={() => window.open("/documents/" + doc.docId, "_blank")}>Open in New Tab
+                            <span className="material-symbols-outlined">open_in_new</span>
+                        </span>
+                        <span className="popup-item" onClick={() => setShowDelete(!showDelete)}>Delete Doc</span>
                         {showDelete && <div className="confirm-popup">
                             <span className="material-symbols-outlined confirm-false" onClick={() => setShowDelete(false)}>
                                 close</span>

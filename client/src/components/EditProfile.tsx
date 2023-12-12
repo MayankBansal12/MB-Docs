@@ -10,6 +10,7 @@ const EditProfile = () => {
     const [name, setName] = useState("");
     const [passwd, setPasswd] = useState("");
     const [confirm, setConfirm] = useState("");
+    const [submitted, setSubmitted] = useState(false);
 
     // Fetch User Details
     const fetchUserDetails = async () => {
@@ -20,8 +21,10 @@ const EditProfile = () => {
     // Update user profile with new details
     const updateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setSubmitted(true);
         const email = user?.email;
         const res = await makeRequest("PUT", "/user", { name, email, passwd });
+        setSubmitted(false)
         if (res.status === 200) {
             notify("Profile Updated!", "success")
         } else {
@@ -53,7 +56,7 @@ const EditProfile = () => {
                     <input type="email" placeholder="Email" disabled value={user ? user.email + "" : "Your Email Address"} />
                     <input type="password" placeholder="Set New Password" value={passwd} onChange={(e) => setPasswd(e.target.value)} />
                     <input type="password" placeholder="Confirm Password" value={confirm} onChange={(e) => setConfirm(e.target.value)} />
-                    {confirm === passwd ? <button type="submit">Update</button> : <p className="error-message">Please confirm your password before signing up</p>}
+                    {confirm === passwd ? <button type="submit" disabled={submitted}>Update</button> : <p className="error-message">Please confirm your password before signing up</p>}
                 </form>
             </div>
         </>

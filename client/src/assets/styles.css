@@ -204,9 +204,11 @@ button:disabled {
 }
 
 .popup-item {
+    display: flex;
+    align-items: center;
     padding: 1rem;
-    transition: all 0.3s;
     cursor: pointer;
+    transition: all 0.3s;
 }
 
 .popup-item:hover {
