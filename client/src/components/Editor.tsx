@@ -3,9 +3,12 @@ import Quill, { Sources } from "quill";
 import "quill/dist/quill.snow.css";
 import { Socket, io } from "socket.io-client";
 import { useParams } from 'react-router-dom';
-import Header from './Header';
 import { useRecoilState } from "recoil";
 import { popupAtom } from "../atom/popup";
+import { chatAtom } from '../atom/chat';
+import Header from './Header';
+import Chat from './Chat';
+
 
 const token = localStorage.getItem("token");
 const backend = import.meta.env.VITE_SERVER;
@@ -34,7 +37,8 @@ const TextEditor = () => {
     const [socket, setSocket] = useState<Socket>();
     const [quill, setQuill] = useState<Quill>();
     const { id: documentId } = useParams();
-    const [popup, setPopup] = useRecoilState(popupAtom)
+    const [popup, setPopup] = useRecoilState(popupAtom);
+    const [showChat, setShowChat] = useRecoilState(chatAtom)
 
     // Intializing/Connecting to socket server
     useEffect(() => {
@@ -128,6 +132,12 @@ const TextEditor = () => {
             <Header page="editor" />
             {popup.show && <div className="popup-overlay" onClick={() => setPopup({ show: false })}></div>}
             <div className="text-editor" ref={wrapperRef}></div>
+            <div className="circle" onClick={() => setShowChat({ show: true })}>
+                <div className="icon">
+                    <span className="material-symbols-outlined">chat</span>
+                </div>
+            </div>
+            {showChat.show && <Chat />}
         </>
     )
 }

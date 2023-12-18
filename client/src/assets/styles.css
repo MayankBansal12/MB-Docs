@@ -246,6 +246,11 @@ button:disabled {
 
 
 /* Editor */
+.text-editor {
+    overflow: scroll;
+    height: 90vh;
+}
+
 .text-editor .ql-toolbar {
     text-align: center;
     z-index: 1;
@@ -319,6 +324,7 @@ button:disabled {
 }
 
 .circle:hover {
+    cursor: pointer;
     transform: scale(1.1);
 }
 
@@ -477,6 +483,71 @@ button:disabled {
     transform: scale(1.1);
 }
 
+
+/* Chat for Editor */
+.chat-container {
+    width: 60%;
+    height: 91.5%;
+    position: absolute;
+    top: 3.5rem;
+    right: 0;
+    z-index: 2;
+    padding: 0.5rem 1rem;
+    background-color: #f3f3f3;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+}
+
+.chat-container input {
+    border: none;
+    width: 95%;
+    font-size: 1rem;
+    padding: 0.5rem;
+    outline: none;
+    background: transparent;
+    border-bottom: 2px solid #323232;
+}
+
+.chat-container button{
+    border: none;
+}
+
+.chat-heading {
+    text-align: center;
+}
+
+.send-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.message-container {
+    height: 78%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-block: 1rem;
+    overflow: scroll;
+}
+
+.message {
+    border: 2px solid #323232;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.user {
+    background-color: #323232;
+    color: #fff;
+}
+
+.assistant {
+    background-color: #fff;
+    color: #323232;
+}
+
 /* Edit User profile */
 .profile-header {
     display: flex;
@@ -548,6 +619,10 @@ footer {
     .header-title {
         width: 50%;
     }
+
+    .chat-container {
+        width: 80%;
+    }
 }
 
 @media screen and (max-width: 425px) {
@@ -557,5 +632,9 @@ footer {
 
     .profile-container>div {
         padding-inline: 0rem;
+    }
+
+    .chat-container {
+        width: 100%;
     }
 }
