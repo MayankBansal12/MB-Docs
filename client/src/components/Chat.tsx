@@ -2,12 +2,13 @@ import { useRecoilState } from "recoil";
 import { chatAtom } from "../atom/chat";
 import { useState } from "react";
 import { IChat } from "../types/types";
+import makeRequest from "../utils/api";
 
 const Chat = () => {
     const [showChat, setShowChat] = useRecoilState(chatAtom)
     const [messages, setMessages] = useState<IChat[]>([]);
 
-    const sendMessage = (e: React.FormEvent<HTMLElement>) => {
+    const sendMessage = async (e: React.FormEvent<HTMLElement>) => {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
         const msg = form.msg.value;
@@ -17,7 +18,18 @@ const Chat = () => {
                 content: msg
             }
             form.msg.value = "";
+
             setMessages((prev) => [...prev, newMsg]);
+            const res = await makeRequest("POST", "/chat", { messages: [...messages, newMsg] });
+
+
+            if (res.status === 200) {
+                const response = {
+                    role: "assistant",
+                    content: res.data.response
+                }
+                setMessages(prev => [...prev, response]);
+            }
         }
     }
 

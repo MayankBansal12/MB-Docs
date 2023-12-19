@@ -6,17 +6,14 @@ import mongoose from "mongoose";
 require("dotenv").config();
 
 const PORT = process.env.PORT || 5000;
-const local_url=process.env.CLIENT_URL || "";
-const prod_url=process.env.CLIENT_PROD_URL || "";
+const local_url = process.env.CLIENT_URL || "";
+const prod_url = process.env.CLIENT_PROD_URL || "";
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: [
-      local_url,
-      prod_url
-    ],
+    origin: [local_url, prod_url],
   },
 });
 
@@ -38,6 +35,7 @@ socket(io);
 // Connect to routes
 import docRouter from "./routes/docRouter";
 import userRouter from "./routes/userRouter";
+import { generateResponse } from "./chat";
 
 app.get("/", (req, res) => {
   res.send("Working!");
@@ -45,6 +43,17 @@ app.get("/", (req, res) => {
 
 app.use("/doc", docRouter);
 app.use("/user", userRouter);
+
+app.post("/chat", async (req, res) => {
+  const messages = req.body.messages;
+
+  try {
+    const response = await generateResponse(messages);
+    return res.status(200).json({ msg: "Response generated!", response });
+  } catch (error) {
+    return res.status(500).json({ msg: "Internal Server Error!", error });
+  }
+});
 
 // Start the server
 server.listen(PORT, () => {
