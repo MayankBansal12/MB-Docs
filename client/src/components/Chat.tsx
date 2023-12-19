@@ -1,34 +1,43 @@
 import { useRecoilState } from "recoil";
 import { chatAtom } from "../atom/chat";
 import { useState } from "react";
+import { IChat } from "../types/types";
 
 const Chat = () => {
     const [showChat, setShowChat] = useRecoilState(chatAtom)
-    const [message, setMessage] = useState("");
+    const [messages, setMessages] = useState<IChat[]>([]);
+
+    const sendMessage = (e: React.FormEvent<HTMLElement>) => {
+        e.preventDefault();
+        const form = e.target as HTMLFormElement;
+        const msg = form.msg.value;
+        if (msg) {
+            const newMsg = {
+                role: "user",
+                content: msg
+            }
+            form.msg.value = "";
+            setMessages((prev) => [...prev, newMsg]);
+        }
+    }
 
     return (
         <div className="chat-container">
             <button className="material-symbols-outlined" onClick={() => setShowChat({ show: false })}>close</button>
-            <h3 className="chat-heading">AI is here to help you with your doc!</h3>
+            <h3 className="chat-heading">AI is here to help you!</h3>
             <div className="message-container">
-                <div className="message user">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, placeat!
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam harum officia eum in iste culpa earum aut dicta, sapiente expedita sunt at ad perspiciatis ea modi officiis delectus et ab?
-                </div>
-                <div className="message assistant">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, placeat!
-                </div>
-                <div className="message user">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, placeat!
-                </div>
-                <div className="message assistant">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga, placeat!
-                </div>
+                {messages && messages.length > 0 ? <>
+                    {messages.map((message, i) => (
+                        <div className={"message " + message.role} key={i}>
+                            {message.content}
+                        </div>
+                    ))}
+                </> : <div className="data-info">Starting by asking your queries</div>}
             </div>
-            <div className="send-message">
-                <input type="text" placeholder="Enter your queries here" value={message} onChange={(e) => setMessage(e.target.value)} />
-                <button className="material-symbols-outlined" onClick={() => console.log("value: ", message)}>send</button>
-            </div>
+            <form className="send-message" onSubmit={sendMessage}>
+                <input type="text" name="msg" placeholder="Enter your queries here" required />
+                <button type="submit" className="material-symbols-outlined">send</button>
+            </form>
         </div>
     )
 }

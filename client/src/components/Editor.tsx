@@ -9,7 +9,6 @@ import { chatAtom } from '../atom/chat';
 import Header from './Header';
 import Chat from './Chat';
 
-
 const token = localStorage.getItem("token");
 const backend = import.meta.env.VITE_SERVER;
 var toolbarOptions = [

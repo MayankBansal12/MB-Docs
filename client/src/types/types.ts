@@ -19,3 +19,8 @@ export interface UserType extends Document {
     passwd: String,
     docs: DocType[]
 }
+
+export type IChat = {
+    role: String,
+    content: String
+}
