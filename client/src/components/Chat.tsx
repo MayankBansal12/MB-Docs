@@ -5,7 +5,7 @@ import { IChat } from "../types/types";
 import makeRequest from "../utils/api";
 
 const Chat = () => {
-    const [showChat, setShowChat] = useRecoilState(chatAtom)
+    const [_showChat, setShowChat] = useRecoilState(chatAtom)
     const [messages, setMessages] = useState<IChat[]>([]);
 
     const sendMessage = async (e: React.FormEvent<HTMLElement>) => {
