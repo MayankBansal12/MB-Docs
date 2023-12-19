@@ -49,5 +49,3 @@ yarn-debug.log*
 yarn-error.log*
 
 _todo
-
-server/src/chat.ts
