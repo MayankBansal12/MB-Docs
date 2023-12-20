@@ -80,7 +80,7 @@ const Header = ({ page, user }: HeaderProps) => {
             </span>}
           </button>
         </div>
-        <button className="btn-dark" onClick={handlePopup}>Share</button>
+        <button className="btn-dark share-btn" onClick={handlePopup}>Share</button>
       </>}
 
       {/* Profile Option */}

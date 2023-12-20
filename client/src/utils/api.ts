@@ -22,10 +22,10 @@ const makeRequest = async (method = "GET", endpoint: string, data: Object | null
         const result = await axios(config);
         return result;
     } catch (error: any) {
-        if (error.response.data.token === false) {
+        if (error?.response?.data?.token === false) {
             (window as any).location = "/login"
         }
-        if (error.response.data.valid === false) {
+        if (error?.response?.data?.valid === false) {
             localStorage.removeItem("token");
             (window as any).location = "/login"
         }

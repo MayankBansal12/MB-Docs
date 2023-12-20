@@ -8,12 +8,14 @@ require("dotenv").config();
 const PORT = process.env.PORT || 5000;
 const local_url = process.env.CLIENT_URL || "";
 const prod_url = process.env.CLIENT_PROD_URL || "";
+const prod_url2 = process.env.CLIENT_PROD_URL2 || "";
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
+  pingTimeout: 120000,
   cors: {
-    origin: [local_url, prod_url],
+    origin: [local_url, prod_url, prod_url2],
   },
 });
 
