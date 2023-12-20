@@ -21,6 +21,6 @@ export interface UserType extends Document {
 }
 
 export type IChat = {
-    role: String,
-    content: String
+    role: string,
+    content: string
 }

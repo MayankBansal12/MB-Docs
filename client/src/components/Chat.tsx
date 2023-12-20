@@ -52,21 +52,33 @@ const Chat = () => {
         }
     }
 
+    // Copying text to clipboard
+    const copyText = (textToCopy: string) => {
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => {
+                notify("Text Copied!", "info", 1000);
+            })
+            .catch(() => {
+                notify("Error while copying, try again!", "error", 1000);
+            });
+    };
+
     return (
         <div className="chat-container">
             <div className="chat-header">
                 <button className="material-symbols-outlined" onClick={() => setShowChat({ show: false })}>close</button>
-                {messages && messages.length > 0 ? <button className="chat-clr-btn" onClick={() => {
+                {messages && messages.length > 0 && <button className="chat-clr-btn" onClick={() => {
                     setShowChat({ show: false });
                     localStorage.removeItem("messages");
-                    notify("Conversation cleared!", "success", 1000);
-                }}>Reset <span className="material-symbols-outlined">delete_sweep</span></button> : <></>}
+                    notify("Conversation cleared!", "info", 1000);
+                }}>Reset <span className="material-symbols-outlined">delete_sweep</span></button>}
             </div>
             <h3 className="chat-heading">AI is here to help you!</h3>
             <div className="message-container">
                 {messages && messages.length > 0 ? <>
                     {messages.map((message, i) => (
                         <div className={"message " + message.role} key={i}>
+                            {message.role === "assistant" && <span className="material-symbols-outlined copy-btn" onClick={() => copyText(message.content)}>content_copy</span>}
                             {message.content}
                         </div>
                     ))}

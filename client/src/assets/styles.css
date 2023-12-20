@@ -563,6 +563,7 @@ button:disabled {
 }
 
 .assistant {
+    position: relative;
     background-color: #323232;
     color: #fff;
 }
@@ -573,6 +574,23 @@ button:disabled {
     font-size: 1rem;
     gap: 0.2rem;
     cursor: pointer;
+}
+
+.assistant:hover .copy-btn {
+    display: inline !important;
+}
+
+.copy-btn {
+    display: none !important;
+    position: absolute;
+    background: #fff;
+    color: #323232;
+    top: -2%;
+    right: -0.5%;
+    padding: 0.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 /* Edit User profile */
