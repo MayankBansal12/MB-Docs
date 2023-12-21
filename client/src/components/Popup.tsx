@@ -36,7 +36,7 @@ const Popup = ({ page }: PopupProps) => {
     return (
         <div className="popup">
             {page === "home" && <div className="popup-home">
-                <span className="popup-item"><Link to="/edit-profile" >Edit Profile</Link></span>
+                <Link to="/edit-profile" className="popup-item">Edit Profile</Link>
                 <span className="popup-item" onClick={() => setShowLogout(!showLogout)}>Logout</span>
                 {showLogout && <div className="confirm-popup">
                     <span className="material-symbols-outlined confirm-false" onClick={() => setShowLogout(false)}>
