@@ -58,6 +58,7 @@ const DocTile = ({ doc, onDelete }: tileProps) => {
                     </div>
                 </div>}
             </div>
+            <div className="border-bottom"></div>
         </Link>
     )
 }
