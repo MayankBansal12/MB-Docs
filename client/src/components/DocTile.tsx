@@ -23,14 +23,16 @@ const DocTile = ({ doc, onDelete }: tileProps) => {
 
     return (
         <Link to={"/documents/" + doc.docId} className="tile">
-            <div className="icon edit">
-                <span className="material-symbols-outlined">description</span>
-            </div>
             <div className="content">
-                <div className="doc-content">
-                    <div className="heading">{doc.title}</div>
-                    <div className="date">
-                        Last Opened: {new Date(doc.updatedAt).toISOString().split('T')[0]}
+                <div className="content-heading">
+                    <div className="icon edit">
+                        <span className="material-symbols-outlined">description</span>
+                    </div>
+                    <div className="doc-content">
+                        <div className="heading">{doc.title}</div>
+                        <div className="date">
+                            Last Opened: {new Date(doc.updatedAt).toISOString().split('T')[0]}
+                        </div>
                     </div>
                 </div>
                 <button className="material-symbols-outlined doc-menu-btn" onClick={(e) => {
