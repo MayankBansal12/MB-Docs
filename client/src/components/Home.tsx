@@ -49,9 +49,24 @@ const Home = () => {
     }
   }, [])
 
+  const reverseOrder = () => {
+    setDoc(prevDoc => {
+      if (prevDoc && prevDoc.length > 0) {
+        let docs = [...prevDoc]?.reverse();
+        return docs;
+      }
+    });
+  }
+
   return (
     <>
       <Header page="home" user={user} />
+      <div className="home-header">
+        <h3>Recent Documents</h3>
+        <button className="material-symbols-outlined" onClick={reverseOrder}>
+          sort
+        </button>
+      </div>
       <div className="container">
         {popup.show && <div className="popup-overlay" onClick={() => setPopup({ show: false })}></div>}
         {document && document.length > 0 ? document?.map((doc, i) => {
