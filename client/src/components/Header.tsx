@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import makeRequest from "../utils/api";
 import { UserType } from "../types/types";
 import Popup from "./Popup";
 import { notify } from "../utils/notification";
 import { popupAtom } from "../atom/popup";
 import { useRecoilState } from "recoil";
+import useApi from "../hooks/useApi";
 
 type HeaderProps = {
   page: string
@@ -18,6 +18,7 @@ const Header = ({ page, user }: HeaderProps) => {
   const [popup, setPopup] = useRecoilState(popupAtom)
   const [title, setTitle] = useState("New Document");
   const { id: documentId } = useParams();
+  const { makeRequest } = useApi();
 
   // To fetch title in case of editor page
   const getTitle = async () => {

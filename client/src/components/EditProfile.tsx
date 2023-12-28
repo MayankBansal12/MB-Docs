@@ -1,16 +1,19 @@
 import { Link } from "react-router-dom"
 import Header from "./Header"
-import makeRequest from "../utils/api";
 import { useEffect, useState } from "react";
 import { UserType } from "../types/types";
 import { notify } from "../utils/notification";
+import useApi from "../hooks/useApi";
+import { useRecoilValue } from "recoil";
+import { loadingAtom } from "../atom/loading";
 
 const EditProfile = () => {
     const [user, setUser] = useState<UserType>();
     const [name, setName] = useState("");
     const [passwd, setPasswd] = useState("");
     const [confirm, setConfirm] = useState("");
-    const [submitted, setSubmitted] = useState(false);
+    const submitted=useRecoilValue(loadingAtom);
+    const { makeRequest } = useApi();
 
     // Fetch User Details
     const fetchUserDetails = async () => {
@@ -21,10 +24,8 @@ const EditProfile = () => {
     // Update user profile with new details
     const updateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setSubmitted(true);
         const email = user?.email;
         const res = await makeRequest("PUT", "/user", { name, email, passwd });
-        setSubmitted(false)
         if (res.status === 200) {
             notify("Profile Updated!", "success")
         } else {

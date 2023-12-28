@@ -3,16 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { DocumentType, UserType } from "../types/types";
 import Header from "./Header";
 import DocTile from "./DocTile";
-import makeRequest from "../utils/api";
 import { notify } from "../utils/notification";
-import { useRecoilState } from "recoil";
+import useApi from "../hooks/useApi";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { popupAtom } from "../atom/popup";
+import { loadingAtom } from "../atom/loading";
 
 const Home = () => {
   let [document, setDoc] = useState<DocumentType[]>();
+  const loading = useRecoilValue(loadingAtom);
   const [user, setUser] = useState<UserType>();
   const navigate = useNavigate();
-  const [popup, setPopup] = useRecoilState(popupAtom)
+  const [popup, setPopup] = useRecoilState(popupAtom);
+  const { makeRequest } = useApi();
 
   // Fetch all the docs for that user
   const fetchData = async () => {
@@ -26,6 +29,17 @@ const Home = () => {
     setUser(res?.data?.user);
   }
 
+  // check for user token and fetch details
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    } else {
+      fetchUser();
+      fetchData();
+    }
+  }, [])
+
   // Delete the selected doc
   const deleteDoc = async (doc: DocumentType) => {
     const res = await makeRequest("DELETE", "/doc/" + doc.docId, doc)
@@ -38,17 +52,7 @@ const Home = () => {
     }
   }
 
-  // check for user token and fetch details
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-    } else {
-      fetchUser();
-      fetchData();
-    }
-  }, [])
-
+  // Reverse the order of documents
   const reverseOrder = () => {
     setDoc(prevDoc => {
       if (prevDoc && prevDoc.length > 0) {
@@ -69,14 +73,15 @@ const Home = () => {
       </div>
       <div className="container">
         {popup.show && <div className="popup-overlay" onClick={() => setPopup({ show: false })}></div>}
-        {document && document.length > 0 ? document?.map((doc, i) => {
-          return (
-            <DocTile doc={doc} key={i} onDelete={deleteDoc} />
-          );
-        })
-          :
-          <div className="data-info">No Documents to show...Create new document and write your ideas, thoughts and collaborate with your friends...Start now by clicking on the button below </div>
-        }
+        {loading ? <div className="loading">Loading Docs...</div> : (
+          document && document.length > 0 ? document?.map((doc, i) => {
+            return (
+              <DocTile doc={doc} key={i} onDelete={deleteDoc} />
+            );
+          })
+            :
+            (<div className="data-info">No Documents to show...Create new document and write your ideas, thoughts and collaborate with your friends...Start now by clicking on the button below </div>)
+        )}
       </div>
       <Link className="circle" to="/editor">
         <div className="icon">

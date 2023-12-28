@@ -1,14 +1,16 @@
-import { useRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { chatAtom } from "../atom/chat";
 import { useEffect, useState } from "react";
 import { IChat } from "../types/types";
-import makeRequest from "../utils/api";
 import { notify } from "../utils/notification";
+import useApi from "../hooks/useApi";
+import { loadingAtom } from "../atom/loading";
 
 const Chat = () => {
-    const [_showChat, setShowChat] = useRecoilState(chatAtom)
+    const setShowChat = useSetRecoilState(chatAtom);
     const [messages, setMessages] = useState<IChat[]>([]);
-    const [isGenerating, setIsGenerating] = useState(false);
+    const isGenerating = useRecoilValue(loadingAtom);
+    const { makeRequest } = useApi();
 
     // Fetch all old messages saved in local storage
     useEffect(() => {
@@ -29,14 +31,12 @@ const Chat = () => {
         const form = e.target as HTMLFormElement;
         const msg = form.msg.value;
         if (msg) {
-            setIsGenerating(true);
             const newMsg = {
                 role: "user",
                 content: msg
             }
             form.msg.value = "";
 
-            setMessages((prev) => [...prev, newMsg]);
             const res = await makeRequest("POST", "/chat", { messages: [...messages, newMsg] });
 
             if (res.status === 200) {
@@ -44,11 +44,10 @@ const Chat = () => {
                     role: "assistant",
                     content: res.data.response
                 }
-                setMessages(prev => [...prev, response]);
+                setMessages(prev => [...prev, newMsg, response]);
             } else {
                 notify("Error, try again", "error");
             }
-            setIsGenerating(false);
         }
     }
 
@@ -84,7 +83,7 @@ const Chat = () => {
                     ))}
                 </> : <div className="data-info">Starting by discussing your thoughts and ideas about a topic or ask a question.</div>}
             </div>
-            {isGenerating ? <div className="text-center">Loading...</div> : <form className="send-message" onSubmit={sendMessage}>
+            {isGenerating ? <div className="text-center">Generating Response...</div> : <form className="send-message" onSubmit={sendMessage}>
                 <input type="text" name="msg" placeholder="What's your message..." required />
                 <button type="submit" className="material-symbols-outlined">send</button>
             </form>}

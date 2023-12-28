@@ -43,6 +43,14 @@ button:disabled {
     text-align: center;
 }
 
+.loading {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* Header */
 .header {
     padding-inline: 1rem;
@@ -418,6 +426,7 @@ button:disabled {
     width: 90%;
     gap: 0.25rem;
     overflow: scroll;
+    overflow-y: hidden;
 }
 
 .doc-content {
